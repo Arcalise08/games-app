@@ -10,7 +10,10 @@ const express = require('express'),
   {check, validationResult } = require('express-validator'),
   cors = require('cors');
   require('./passport');
+  const path = require("path");
+  
 app = express();
+
 
 //remote database IP
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -35,7 +38,7 @@ const Users = Models.user;
 const Genres = Models.genre;
 const Studios = Models.studio;
 const Ratings = Models.rating;
-const path = require("path");
+
 
 app.use(function(err, req, res, next) {
     console.log(err.stack)
