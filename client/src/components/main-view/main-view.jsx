@@ -346,7 +346,7 @@ export class MainViewer extends React.Component {
                     <Route path='' render={({location}) =><NavMenu user={user} linkTo={(link, delay, bool) => this.switchView(link, delay, bool)} location={location.pathname} onLoggedOut={user => this.onLoggedOut(user)}/> }/>
                     <Route path='' render={({location}) => {if (this.state.redirect) {return <Redirect push to={this.state.redirect}/>}}}/>
 
-                    <div className='main-viewer row h-100 justify-content-center overflow-hidden mx-auto'>
+                    <div className='main-viewer row h-100 justify-content-center mx-auto'>
                         <Switch>
                             
                             

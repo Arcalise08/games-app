@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { setPage, setVisible } from '../../actions/actions';
@@ -134,11 +135,15 @@ export class NavMenu extends React.Component {
                         <MediaQuery maxDeviceWidth={992} >
                             {this.navDropdown(user, onLoggedOut, linkTo)}
                         </MediaQuery>
-                    <Navbar.Collapse id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
+                    <Navbar.Collapse className='mt-1' id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
                     <Nav>
-                        <Nav.Link className='disabled'>Games</Nav.Link>
-                        <Nav.Link className='disabled'>Studios</Nav.Link>
-                        <Nav.Link className='disabled'>Genres</Nav.Link>
+                        <Row className='ml-1'>
+                        
+                            <Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Games</Nav.Item>
+                            <Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Studios</Nav.Item>
+                            <Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Genres</Nav.Item>
+                        </Row>
+
                     </Nav>
                     </Navbar.Collapse>
                     <MediaQuery minDeviceWidth={992} >
@@ -157,9 +162,11 @@ export class NavMenu extends React.Component {
 
                         <Navbar.Collapse id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
                         <Nav>
-                            <Nav.Link title="/games" onClick={() => linkTo('/games')} className='menuItem1 active'>Games</Nav.Link>
-                            <Nav.Link title="/studios" onClick={() => linkTo('/studios')}  className='menuItem1'>Studios</Nav.Link>
-                            <Nav.Link title="/genres" onClick={() => linkTo('/genres')} className='menuItem1'>Genres</Nav.Link>
+                            <Row className='ml-1 mt-2'>
+                                <Nav.Item as={Button} variant={'outline-light'} title="/games" onClick={() =>  {this.navToggle(false);linkTo('/games')}} className='menuItem1 active border-0'>Games</Nav.Item>
+                                <Nav.Item as={Button} variant={'outline-light'} title="/studios" onClick={() => {this.navToggle(false);linkTo('/studios')}}  className='menuItem1 border-0'>Studios</Nav.Item>
+                                <Nav.Item as={Button} variant={'outline-light'} title="/genres" onClick={() => {this.navToggle(false);linkTo('/genres')}} className='menuItem1 border-0'>Genres</Nav.Item>
+                            </Row>
                         </Nav>
                     </Navbar.Collapse>
                     <MediaQuery minDeviceWidth={992} >

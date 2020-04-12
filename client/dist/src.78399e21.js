@@ -62599,7 +62599,72 @@ DropdownButton.displayName = 'DropdownButton';
 DropdownButton.propTypes = propTypes;
 var _default = DropdownButton;
 exports.default = _default;
-},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./Dropdown":"../node_modules/react-bootstrap/esm/Dropdown.js"}],"../node_modules/react-bootstrap/esm/Row.js":[function(require,module,exports) {
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./Dropdown":"../node_modules/react-bootstrap/esm/Dropdown.js"}],"../node_modules/react-bootstrap/esm/Col.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DEVICE_SIZES = ['xl', 'lg', 'md', 'sm', 'xs'];
+
+var Col = _react.default.forwardRef( // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
+function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      _ref$as = _ref.as,
+      Component = _ref$as === void 0 ? 'div' : _ref$as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "as"]);
+  var prefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'col');
+  var spans = [];
+  var classes = [];
+  DEVICE_SIZES.forEach(function (brkPoint) {
+    var propValue = props[brkPoint];
+    delete props[brkPoint];
+    var span, offset, order;
+
+    if (propValue != null && typeof propValue === 'object') {
+      var _propValue$span = propValue.span;
+      span = _propValue$span === void 0 ? true : _propValue$span;
+      offset = propValue.offset;
+      order = propValue.order;
+    } else {
+      span = propValue;
+    }
+
+    var infix = brkPoint !== 'xs' ? "-" + brkPoint : '';
+    if (span != null) spans.push(span === true ? "" + prefix + infix : "" + prefix + infix + "-" + span);
+    if (order != null) classes.push("order" + infix + "-" + order);
+    if (offset != null) classes.push("offset" + infix + "-" + offset);
+  });
+
+  if (!spans.length) {
+    spans.push(prefix); // plain 'col'
+  }
+
+  return _react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: _classnames.default.apply(void 0, [className].concat(spans, classes))
+  }));
+});
+
+Col.displayName = 'Col';
+var _default = Col;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../node_modules/react-bootstrap/esm/Row.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63854,6 +63919,8 @@ var _DropdownButton = _interopRequireDefault(require("react-bootstrap/DropdownBu
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
+var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
+
 var _lodash = _interopRequireDefault(require("lodash"));
 
 var _reactRedux = require("react-redux");
@@ -64109,17 +64176,29 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         }, "OPgames"), _react.default.createElement(_reactResponsive.default, {
           maxDeviceWidth: 992
         }, this.navDropdown(user, onLoggedOut, linkTo)), _react.default.createElement(_Navbar.default.Collapse, {
+          className: "mt-1",
           id: "basic-navbar-nav",
           onEnter: function onEnter(user) {
             return _this3.navDropdown(user);
           }
-        }, _react.default.createElement(_Nav.default, null, _react.default.createElement(_Nav.default.Link, {
-          className: "disabled"
-        }, "Games"), _react.default.createElement(_Nav.default.Link, {
-          className: "disabled"
-        }, "Studios"), _react.default.createElement(_Nav.default.Link, {
-          className: "disabled"
-        }, "Genres"))), _react.default.createElement(_reactResponsive.default, {
+        }, _react.default.createElement(_Nav.default, null, _react.default.createElement(_Row.default, {
+          className: "ml-1"
+        }, _react.default.createElement(_Nav.default.Item, {
+          as: _Button.default,
+          disabled: true,
+          variant: 'outline-light',
+          className: "border-0"
+        }, "Games"), _react.default.createElement(_Nav.default.Item, {
+          as: _Button.default,
+          disabled: true,
+          variant: 'outline-light',
+          className: "border-0"
+        }, "Studios"), _react.default.createElement(_Nav.default.Item, {
+          as: _Button.default,
+          disabled: true,
+          variant: 'outline-light',
+          className: "border-0"
+        }, "Genres")))), _react.default.createElement(_reactResponsive.default, {
           minDeviceWidth: 992
         }, this.navDropdown(user, onLoggedOut, linkTo)));
       }
@@ -64149,25 +64228,39 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         onEnter: function onEnter(user) {
           return _this3.navDropdown(user);
         }
-      }, _react.default.createElement(_Nav.default, null, _react.default.createElement(_Nav.default.Link, {
+      }, _react.default.createElement(_Nav.default, null, _react.default.createElement(_Row.default, {
+        className: "ml-1 mt-2"
+      }, _react.default.createElement(_Nav.default.Item, {
+        as: _Button.default,
+        variant: 'outline-light',
         title: "/games",
         onClick: function onClick() {
-          return linkTo('/games');
+          _this3.navToggle(false);
+
+          linkTo('/games');
         },
-        className: "menuItem1 active"
-      }, "Games"), _react.default.createElement(_Nav.default.Link, {
+        className: "menuItem1 active border-0"
+      }, "Games"), _react.default.createElement(_Nav.default.Item, {
+        as: _Button.default,
+        variant: 'outline-light',
         title: "/studios",
         onClick: function onClick() {
-          return linkTo('/studios');
+          _this3.navToggle(false);
+
+          linkTo('/studios');
         },
-        className: "menuItem1"
-      }, "Studios"), _react.default.createElement(_Nav.default.Link, {
+        className: "menuItem1 border-0"
+      }, "Studios"), _react.default.createElement(_Nav.default.Item, {
+        as: _Button.default,
+        variant: 'outline-light',
         title: "/genres",
         onClick: function onClick() {
-          return linkTo('/genres');
+          _this3.navToggle(false);
+
+          linkTo('/genres');
         },
-        className: "menuItem1"
-      }, "Genres"))), _react.default.createElement(_reactResponsive.default, {
+        className: "menuItem1 border-0"
+      }, "Genres")))), _react.default.createElement(_reactResponsive.default, {
         minDeviceWidth: 992
       }, this.navDropdown(user, onLoggedOut, linkTo)));
     }
@@ -64191,7 +64284,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps, {
 })(NavMenu);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-bootstrap/Nav":"../node_modules/react-bootstrap/esm/Nav.js","react-bootstrap/Navbar":"../node_modules/react-bootstrap/esm/Navbar.js","react-bootstrap/Dropdown":"../node_modules/react-bootstrap/esm/Dropdown.js","react-bootstrap/DropdownButton":"../node_modules/react-bootstrap/esm/DropdownButton.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","lodash":"../node_modules/lodash/lodash.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-responsive":"../node_modules/react-responsive/dist/react-responsive.js","./user.svg":"components/nav-menu/user.svg","./search.svg":"components/nav-menu/search.svg","./exit.svg":"components/nav-menu/exit.svg","./settings.svg":"components/nav-menu/settings.svg","./lock.svg":"components/nav-menu/lock.svg","./favorite.svg":"components/nav-menu/favorite.svg"}],"../node_modules/react-bootstrap/esm/Feedback.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-bootstrap/Nav":"../node_modules/react-bootstrap/esm/Nav.js","react-bootstrap/Navbar":"../node_modules/react-bootstrap/esm/Navbar.js","react-bootstrap/Dropdown":"../node_modules/react-bootstrap/esm/Dropdown.js","react-bootstrap/DropdownButton":"../node_modules/react-bootstrap/esm/DropdownButton.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","lodash":"../node_modules/lodash/lodash.js","react-redux":"../node_modules/react-redux/es/index.js","../../actions/actions":"actions/actions.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-responsive":"../node_modules/react-responsive/dist/react-responsive.js","./user.svg":"components/nav-menu/user.svg","./search.svg":"components/nav-menu/search.svg","./exit.svg":"components/nav-menu/exit.svg","./settings.svg":"components/nav-menu/settings.svg","./lock.svg":"components/nav-menu/lock.svg","./favorite.svg":"components/nav-menu/favorite.svg"}],"../node_modules/react-bootstrap/esm/Feedback.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64817,72 +64910,7 @@ var FormGroup = _react.default.forwardRef(function (_ref, ref) {
 FormGroup.displayName = 'FormGroup';
 var _default = FormGroup;
 exports.default = _default;
-},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./FormContext":"../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../node_modules/react-bootstrap/esm/Col.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
-
-var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
-
-var _classnames = _interopRequireDefault(require("classnames"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _ThemeProvider = require("./ThemeProvider");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var DEVICE_SIZES = ['xl', 'lg', 'md', 'sm', 'xs'];
-
-var Col = _react.default.forwardRef( // Need to define the default "as" during prop destructuring to be compatible with styled-components github.com/react-bootstrap/react-bootstrap/issues/3595
-function (_ref, ref) {
-  var bsPrefix = _ref.bsPrefix,
-      className = _ref.className,
-      _ref$as = _ref.as,
-      Component = _ref$as === void 0 ? 'div' : _ref$as,
-      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "as"]);
-  var prefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'col');
-  var spans = [];
-  var classes = [];
-  DEVICE_SIZES.forEach(function (brkPoint) {
-    var propValue = props[brkPoint];
-    delete props[brkPoint];
-    var span, offset, order;
-
-    if (propValue != null && typeof propValue === 'object') {
-      var _propValue$span = propValue.span;
-      span = _propValue$span === void 0 ? true : _propValue$span;
-      offset = propValue.offset;
-      order = propValue.order;
-    } else {
-      span = propValue;
-    }
-
-    var infix = brkPoint !== 'xs' ? "-" + brkPoint : '';
-    if (span != null) spans.push(span === true ? "" + prefix + infix : "" + prefix + infix + "-" + span);
-    if (order != null) classes.push("order" + infix + "-" + order);
-    if (offset != null) classes.push("offset" + infix + "-" + offset);
-  });
-
-  if (!spans.length) {
-    spans.push(prefix); // plain 'col'
-  }
-
-  return _react.default.createElement(Component, (0, _extends2.default)({}, props, {
-    ref: ref,
-    className: _classnames.default.apply(void 0, [className].concat(spans, classes))
-  }));
-});
-
-Col.displayName = 'Col';
-var _default = Col;
-exports.default = _default;
-},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../node_modules/react-bootstrap/esm/FormLabel.js":[function(require,module,exports) {
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./FormContext":"../node_modules/react-bootstrap/esm/FormContext.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../node_modules/react-bootstrap/esm/FormLabel.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -83304,7 +83332,7 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
           }
         }
       }), _react.default.createElement("div", {
-        className: "main-viewer row h-100 justify-content-center overflow-hidden mx-auto"
+        className: "main-viewer row h-100 justify-content-center mx-auto"
       }, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/login",
@@ -83770,7 +83798,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59493" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59675" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
