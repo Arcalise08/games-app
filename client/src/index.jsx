@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import MainViewer from './components/main-view/main-view';
 import gamesApp from './reducers/reducers';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
 
 
