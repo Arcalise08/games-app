@@ -63922,7 +63922,7 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {
       var currentComponent = this;
       var path = this.props.location;
-      var all = document.querySelectorAll('.menuItem');
+      var all = document.querySelectorAll('.menuItem1');
       var a = false;
       setTimeout(function () {
         if (path) all.forEach(function (e) {
@@ -63939,7 +63939,7 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
     value: function componentDidUpdate() {
       var currentComponent = this;
       var path = this.props.location;
-      var all = document.querySelectorAll('.menuItem');
+      var all = document.querySelectorAll('.menuItem1');
       setTimeout(function () {
         currentComponent.props.setPage(path);
         all.forEach(function (e) {
@@ -64154,19 +64154,19 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         onClick: function onClick() {
           return linkTo('/games');
         },
-        className: "menuItem active"
+        className: "menuItem1 active"
       }, "Games"), _react.default.createElement(_Nav.default.Link, {
         title: "/studios",
         onClick: function onClick() {
           return linkTo('/studios');
         },
-        className: "menuItem"
+        className: "menuItem1"
       }, "Studios"), _react.default.createElement(_Nav.default.Link, {
         title: "/genres",
         onClick: function onClick() {
           return linkTo('/genres');
         },
-        className: "menuItem"
+        className: "menuItem1"
       }, "Genres"))), _react.default.createElement(_reactResponsive.default, {
         minDeviceWidth: 992
       }, this.navDropdown(user, onLoggedOut, linkTo)));
@@ -83770,7 +83770,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57827" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59493" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

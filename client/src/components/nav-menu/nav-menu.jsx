@@ -30,7 +30,7 @@ export class NavMenu extends React.Component {
         componentDidMount() {
             let currentComponent = this;
             var path = this.props.location
-            var all = document.querySelectorAll('.menuItem')
+            var all = document.querySelectorAll('.menuItem1')
             var a = false
             setTimeout(function(){
                 if (path)
@@ -49,7 +49,7 @@ export class NavMenu extends React.Component {
         componentDidUpdate() {
             let currentComponent = this;
             var path = this.props.location
-            var all = document.querySelectorAll('.menuItem')
+            var all = document.querySelectorAll('.menuItem1')
 
             setTimeout(function(){
                 currentComponent.props.setPage(path)
@@ -157,9 +157,9 @@ export class NavMenu extends React.Component {
 
                         <Navbar.Collapse id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
                         <Nav>
-                            <Nav.Link title="/games" onClick={() => linkTo('/games')} className='menuItem active'>Games</Nav.Link>
-                            <Nav.Link title="/studios" onClick={() => linkTo('/studios')}  className='menuItem'>Studios</Nav.Link>
-                            <Nav.Link title="/genres" onClick={() => linkTo('/genres')} className='menuItem'>Genres</Nav.Link>
+                            <Nav.Link title="/games" onClick={() => linkTo('/games')} className='menuItem1 active'>Games</Nav.Link>
+                            <Nav.Link title="/studios" onClick={() => linkTo('/studios')}  className='menuItem1'>Studios</Nav.Link>
+                            <Nav.Link title="/genres" onClick={() => linkTo('/genres')} className='menuItem1'>Genres</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                     <MediaQuery minDeviceWidth={992} >
