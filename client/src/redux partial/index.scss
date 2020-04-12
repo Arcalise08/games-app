@@ -1,0 +1,71 @@
+$color: green;
+
+html, body {
+    height: 100%;
+    background-color: #d4d5d0;
+}
+
+.OPgames {
+    color: $color;
+}
+
+.main-viewer {
+    margin-top: 4rem!important;
+}
+
+.dropdown-toggle::after { 
+    content: none; 
+} 
+
+.user {
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.search {
+    position: relative;
+    right: 0;
+    top: 0;
+}
+.ratings {
+    display: inline-block;
+    position: relative;
+    top: -15rem;
+    left: 4rem;
+}
+.star {
+    border: none;
+}
+.star:hover {
+    background-image: url('/img/goldstar.svg');
+    width: 5vh;
+    height: auto;
+    border: green;
+}
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    border-style: groove;
+}
+.cardImg {
+    height: 200px;
+    border-color: #b0b0b1;
+}
+.navBrand {
+    cursor: pointer;
+}
+
+@media all and (max-width: 992px) {
+
+    .ratings {
+        display: block;
+        position: static;
+    }
+  }
+
+@media all and (min-width: 1500px) {
+
+    .ratings {
+        display: block;
+        position: static;
+    }
+  }

@@ -1,0 +1,37 @@
+{
+  "name": "myapp",
+  "version": "0.0.1",
+  "description": "my first app",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "eslint": "^6.8.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.5",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "minimist": "^1.2.5"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arcalise08/Movie-App.git"
+  },
+  "author": "Kyle Estes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arcalise08/Movie-App/issues"
+  },
+  "homepage": "https://github.com/Arcalise08/Movie-App#readme"
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>OP-API</title>
+</head>
+
+
+<body>
+
+
+    <div class='header mt-5'>
+    <h1 class='text-center'>Welcome to the OP-Api documentation.</h1>
+    </div>
+
+    <div class='row'>
+
+    <div class='leftside col'>
+
+    </div>
+    <div class='middle col'>
+        <p class='text-center mt-2'>The purpose of this API is to compile data on different types of video games and to make available
+            that data for reading, alteration, or outright deleting. The main functions of the server have
+            been implimented already and you can see the list below for instructions on using these functions
+            appropriately.
+        </p>
+
+        <div class='text-center mb-5'>
+            <div class="btn-group">
+                <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
+                    User Actions
+                </button>
+                <div class="dropdown-menu">
+                    <button class='form-control navbtn bt' type="button">get</button>
+                    <button class='form-control navbtn bt' type="button">put</button>
+                    <button class='form-control navbtn bt' type="button">post</button>
+                    <button class='form-control navbtn bt' type="button">delete</button>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
+                    Admin Actions
+                </button>
+                <div class="dropdown-menu">
+                    <button class='form-control navbtn adm' id='Adm-get' type="button">get</button>
+                    <button class='form-control navbtn adm' id='Adm-put' type="button">put</button>
+                    <button class='form-control navbtn adm' id='Adm-post' type="button">post</button>
+                    <button class='form-control navbtn adm' id='Adm-delete' type="button">delete</button>
+                </div>
+            </div>
+        </div>
+        <div class='info'>
+            <div class='get item d-none'>
+                <h1 class='text-center'><u>Get Method</u></h1>
+                <div class="card my-2 mt-5">
+                    <div class="card-header">
+                        <h4>Return all games</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /games</strong> <br>Will return a list of all games
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-2">
+                    <div class="card-header">
+                        <h4>Return all genres</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /genres</strong> <br>Will return a list of all genres
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-2">
+                    <div class="card-header">
+                        <h4>Return all studios</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /studios</strong> <br>Will return a list of all studios
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-2">
+                    <div class="card-header">
+                        <h4>Search for single game</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /games/"game to search"</strong> <br>Will return the searched for game
+                            <small> <br>ex: /games/Rocket%20League/ will return Rocket Leagues info</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-2 mb-5">
+                    <div class="card-header">
+                        <h4>Search for users info</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /users/info</strong> <br>Will return all info on user currently logged in.
+                            <small><br>Will return error if not logged in.</small> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class='put item d-none'>
+                <h1 class='text-center'><u>Put Method</u></h1>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Update user</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /users/info/</strong> <br>
+                            <u>Expected format</u> <br>
+                            {Username: 'Username', <strong>--required</strong> <br>
+                            Password: 'Password', <strong>--required</strong> <br>
+                            Email: 'Email', <strong>--required</strong> <br>
+                            Birthday: Date <br>
+                            <small>make sure you pass the info for username/email & password even if they arent changing.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class='post item d-none'>
+                    <h1 class='text-center'><u>Post Method</u></h1>
+                    <div class="card mt-5 my-2">
+                        <div class="card-header">
+                            <h4>Login</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Endpoint /login?Username=<span style="color: blue;">USERNAME</span>&Password=<span style="color: blue;">PASSWORD</span></strong><br>Will request a JWT token for login. Tokens last 30m
+                                <small> <br>replace <span style="color: blue;">USERNAME</span> and <span style="color: blue;">PASSWORD</span> with your username and password to submit login request</small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card my-4">
+                        <div class="card-header">
+                            <h4>Register User</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Endpoint /users</strong> <br>
+                                <u>Expected format</u> <br>
+                                {Username: 'Username', <strong>--required</strong> <br>
+                                Password: 'Password', <strong>--required</strong> <br>
+                                Email: 'Email', <strong>--required</strong> <br>
+                                Birthday: Date}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <div class='delete item d-none'>
+                <h1 class='text-center'><u>Delete Method</u></h1>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Remove user</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /users/info</strong><br>will delete currently logged in user.
+                            <small> <br>Use caution when using method as it will <strong>permenantly</strong> delete user.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class='Adm-get item d-none'>
+                <h1 class='text-center'><u>Get Method</u></h1>
+                <div class="card mb-5 my-2">
+                    <div class="card-header">
+                        <h4>Return all users</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/users</strong> <br> Will return all users info
+                            <small><br>With great <span style="color: red;">knowledge</span> comes great <span style="color: red;">responsibility</span></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class='Adm-put item d-none'>
+                <h1 class='text-center'><u>Put Method</u></h1>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Update game</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/games/"game to edit"/</strong> <br>
+                            <u>Expected format</u> <br>
+                            {Name: 'Game Name', <strong>--required</strong><br>
+                            Description: 'Game description', <strong>--required</strong><br>
+                            Genre : 'Genre name in String format', <strong>--required</strong><br>
+                            Studio : 'Studio name in String format', <strong>--required</strong><br>
+                            Players: Number} <strong>--required</strong><br>
+                            <small>Make sure the genre and studio are registered or error will occur!</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Update studio</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/studios/"studio to edit"/</strong> <br>
+                            <u>Expected format</u> <br>
+                            {Name: 'Game Name', <strong>--required</strong><br>
+                            Description: 'Game description', <strong>--required</strong><br>
+                            Founded: 'String or Date', <strong>--required</strong><br>
+                            StillAlive: true or false} <strong>--required</strong><br>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Update genres</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/genres/"genre to edit"/</strong> <br>
+                            <u>Expected format</u> <br>
+                            {Name: 'Game Name', <strong>--required</strong><br>
+                            Description: 'Game description'} <strong>--required</strong>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class='Adm-post item d-none'>
+                    <h1 class='text-center'><u>Post Method</u></h1>
+                    <div class="card my-4">
+                        <div class="card-header">
+                            <h4>Add new game</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Endpoint /admin/games</strong> <br>
+                                <u>Expected format</u> <br>
+                                {Name: 'Game Name', <strong>--required</strong><br>
+                                Description: 'Game description', <strong>--required</strong><br>
+                                Genre : 'Genre name in String format', <strong>--required --This accepts multiple values but MUST be passed as an array even if theres only one!! </strong><br>
+                                Studio : 'Studio name in String format', <strong>--required</strong><br>
+                                Players: Number} <strong>--required</strong><br>
+                                <small>Make sure the genre and studio are registered or error will occur!</small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card my-4">
+                        <div class="card-header">
+                            <h4>Add new studio</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Endpoint /admin/studios</strong> <br>
+                                <u>Expected format</u> <br>
+                                {Name: 'Game Name', <strong>--required</strong><br>
+                                Description: 'Game description', <strong>--required</strong><br>
+                                Founded: 'String or Date', <strong>--required</strong><br>
+                                StillAlive: true or false} <strong>--required</strong><br>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card my-4">
+                        <div class="card-header">
+                            <h4>Add new genre</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Endpoint /admin/genres</strong> <br>
+                                <u>Expected format</u> <br>
+                                {Name: 'Game Name', <strong>--required</strong><br>
+                                Description: 'Game description'} <strong>--required</strong><br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <div class='Adm-delete item d-none'>
+                <h1 class='text-center'><u>Delete Method</u></h1>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Remove game</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/games/"game to remove"</strong> <br> Will permenantly remove game
+                            <small> <br>ex /admin/games/Rocket%20League/ will delete game.</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Remove studio</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/studios/"studio to remove"</strong> <br> Will permenantly remove studio
+                            <small> <br>ex /admin/studios/Respawn%20Entertainment/ will delete studio.</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Remove genre</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/genres/"genre to remove"</strong><br> Will permenantly remove genre
+                            <small> <br>ex /admin/genre/survival/ will delete genre.</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h4>Remove user</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Endpoint /admin/users/"user to remove"</strong><br> Will permentantly remove user
+                            <small> <br>ex /admin/users/<span style="color: blue;">user1</span> will delete <span style="color: blue;">user1</span> use caution as it is not recoverable.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='rightside col'>
+
+    </div>
+</div>
+
+
+<script src="js/jquery-3.4.1.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $(".bt").on('click', function(e) {
+        var tar = String(e.target.innerText)
+        
+        $('.item').addClass('d-none');
+
+        $("." + tar).removeClass('d-none');
+        
+    })
+
+    $(".adm").on('click', function(e) {
+        var tar = String(e.target.id)
+        console.log(tar)
+        $('.item').addClass('d-none');
+
+        $("." + tar).removeClass('d-none');
+        
+    })
+
+</script>
+</body>
+
+</html>
