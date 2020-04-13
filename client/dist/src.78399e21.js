@@ -64021,6 +64021,8 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "navToggle",
     value: function navToggle(value) {
+      var search = document.getElementById('searchBar');
+
       if (value) {
         this.setState({
           menuExpand: !this.state.menuExpand
@@ -64031,13 +64033,20 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         this.setState({
           menuExpand: false
         });
+
+        if (search) {
+          search.classList.toggle('d-none');
+          this.props.setVisible(!this.props.visible);
+        }
       }
     }
   }, {
     key: "searchToggle",
     value: function searchToggle(a) {
-      var searchBar = document.querySelector('.searchBar');
-      this.props.setVisible(!this.props.visible);
+      if (this.props.location === '/games') {
+        document.getElementById('searchBar').classList.toggle('d-none');
+        this.props.setVisible(!this.props.visible);
+      }
     }
   }, {
     key: "navDropdown",
@@ -64055,7 +64064,7 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
       }, _react.default.createElement("img", {
         className: "m-auto",
         style: {
-          filter: 'invert(.4)'
+          filter: 'invert(.6)'
         },
         src: _search.default,
         height: "20",
@@ -64222,7 +64231,7 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
           return linkTo('/games');
         }
       }, "OPgames"), _react.default.createElement(_reactResponsive.default, {
-        maxDeviceWidth: 992
+        maxWidth: 992
       }, this.navDropdown(user, onLoggedOut, linkTo)), _react.default.createElement(_Navbar.default.Collapse, {
         id: "basic-navbar-nav",
         onEnter: function onEnter(user) {
@@ -64261,8 +64270,8 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         },
         className: "menuItem1 border-0"
       }, "Genres")))), _react.default.createElement(_reactResponsive.default, {
-        minDeviceWidth: 992
-      }, this.navDropdown(user, onLoggedOut, linkTo)));
+        minWidth: 992
+      }, console.log('962'), this.navDropdown(user, onLoggedOut, linkTo)));
     }
   }]);
 
@@ -78731,7 +78740,7 @@ function RegisterView(props) {
       regError = _useState14[0],
       setregError = _useState14[1];
 
-  var handleSubmit = function handleSubmit(e) {
+  var handleSubmit = function handleSubmit(event) {
     var form = event.currentTarget;
 
     if (form.checkValidity() === false) {
@@ -78743,26 +78752,36 @@ function RegisterView(props) {
 
     if (form.checkValidity() === true) {
       event.preventDefault();
-      e.preventDefault();
-
-      _axios.default.post('https://opgamesapi.herokuapp.com/users', {
-        Username: username,
-        Password: password,
-        Email: email,
-        Birthday: birthday
+      console.log(1);
+      (0, _axios.default)({
+        method: 'post',
+        url: "https://opgamesapi.herokuapp.com/users",
+        data: {
+          Username: username,
+          Password: password,
+          Email: email,
+          Birthday: birthday
+        }
       }).then(function (response) {
-        var data = response.data;
-        props.redirect('/login', 700, false);
-      }).catch(function (e) {
+        props.linkTo('/login', 700, false);
+      }).catch(function (err) {
+        console.log(err.response);
         console.log('error registering user');
-        var listErr = e.response.data.errors.map(function (msg) {
-          return _react.default.createElement("li", {
-            key: msg.value
-          }, msg.msg);
-        });
-        console.log(e.response.data);
-        setregError(listErr);
-        setShow(true);
+
+        if (err.response) {
+          var listErr = err.response.data.errors.map(function (msg) {
+            return _react.default.createElement("li", {
+              key: msg.value
+            }, msg.msg);
+          });
+          setregError(listErr);
+          setShow(true);
+        } else {
+          var _listErr = _react.default.createElement("li", null, "Unspecified error! Sorry!");
+
+          setregError(_listErr);
+          setShow(true);
+        }
       });
     }
   };
@@ -79220,7 +79239,7 @@ var GameCard = /*#__PURE__*/function (_React$Component) {
           animate = _this$props.animate,
           linkTo = _this$props.linkTo;
       return _react.default.createElement(_reactCssAnimated.default, {
-        className: "mt-3 col-lg-3 col-md-4 col-sm-8",
+        className: "mt-3 col-lg-3 col-md-4 col-sm-6 col-xs-8",
         animateOnMount: true,
         duration: {
           in: 600
@@ -79302,7 +79321,7 @@ function VisibilityFilterInput(props) {
     };
   }, []);
   return _react.default.createElement(_reactCssAnimated.default, {
-    className: "mx-auto searchBar col-lg-6",
+    className: "mx-auto col-lg-6",
     duration: {
       in: 600
     },
@@ -79310,7 +79329,8 @@ function VisibilityFilterInput(props) {
     animationOut: "fadeOutUp",
     isVisible: visible
   }, _react.default.createElement(_Form.default.Control, {
-    className: "",
+    className: "d-none",
+    id: "searchBar",
     onChange: function onChange(e) {
       return props.setFilter(e.target.value.toLowerCase());
     },
@@ -79385,7 +79405,7 @@ function GameList(props) {
     visible: visible
   }), _react.default.createElement("div", {
     className: "row justify-content-center"
-  }, _react.default.createElement(_Col.default, null), _react.default.createElement(_Col.default, {
+  }, _react.default.createElement(_Col.default, {
     xs: 10
   }, _react.default.createElement(_Row.default, null, filteredGames.map(function (m) {
     return _react.default.createElement(_gameCard.GameCard, {
@@ -79394,7 +79414,7 @@ function GameList(props) {
       animate: props.animate,
       game: m
     });
-  }))), _react.default.createElement(_Col.default, null)));
+  })))));
 }
 
 var _default = (0, _reactRedux.connect)(mapStateToProps)(GameList);
@@ -79638,6 +79658,7 @@ var GameView = /*#__PURE__*/function (_React$Component) {
       var search = favorites.find(function (e) {
         return e._id === game._id;
       });
+      window.scrollTo(0, 0);
 
       if (search) {
         component.setState({
@@ -82174,7 +82195,63 @@ var StudioView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.StudioView = StudioView;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","../../img/like.svg":"img/like.svg","../../img/dislike.svg":"img/dislike.svg","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../node_modules/react-bootstrap/esm/ButtonGroup.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","../../img/like.svg":"img/like.svg","../../img/dislike.svg":"img/dislike.svg","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../node_modules/react-bootstrap/esm/Table.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _ThemeProvider = require("./ThemeProvider");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Table = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      striped = _ref.striped,
+      bordered = _ref.bordered,
+      borderless = _ref.borderless,
+      hover = _ref.hover,
+      size = _ref.size,
+      variant = _ref.variant,
+      responsive = _ref.responsive,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "striped", "bordered", "borderless", "hover", "size", "variant", "responsive"]);
+  var decoratedBsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'table');
+  var classes = (0, _classnames.default)(className, decoratedBsPrefix, variant && decoratedBsPrefix + "-" + variant, size && decoratedBsPrefix + "-" + size, striped && decoratedBsPrefix + "-striped", bordered && decoratedBsPrefix + "-bordered", borderless && decoratedBsPrefix + "-borderless", hover && decoratedBsPrefix + "-hover");
+
+  var table = _react.default.createElement("table", (0, _extends2.default)({}, props, {
+    className: classes,
+    ref: ref
+  }));
+
+  if (responsive) {
+    var responsiveClass = decoratedBsPrefix + "-responsive";
+
+    if (typeof responsive === 'string') {
+      responsiveClass = responsiveClass + "-" + responsive;
+    }
+
+    return _react.default.createElement("div", {
+      className: responsiveClass
+    }, table);
+  }
+
+  return table;
+});
+
+var _default = Table;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"../node_modules/react-bootstrap/esm/ButtonGroup.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82222,7 +82299,95 @@ ButtonGroup.displayName = 'ButtonGroup';
 ButtonGroup.defaultProps = defaultProps;
 var _default = ButtonGroup;
 exports.default = _default;
-},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"components/admin-view/admin-view.jsx":[function(require,module,exports) {
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","classnames":"../node_modules/classnames/index.js","react":"../node_modules/react/index.js","./ThemeProvider":"../node_modules/react-bootstrap/esm/ThemeProvider.js"}],"components/user-card/user-card.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UserCard = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
+
+var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
+
+var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var UserCard = /*#__PURE__*/function (_React$Component) {
+  _inherits(UserCard, _React$Component);
+
+  var _super = _createSuper(UserCard);
+
+  function UserCard() {
+    _classCallCheck(this, UserCard);
+
+    return _super.call(this);
+  }
+
+  _createClass(UserCard, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          user = _this$props.user,
+          animate = _this$props.animate,
+          linkTo = _this$props.linkTo;
+      return _react.default.createElement(_reactCssAnimated.default, {
+        className: "mt-3 col-lg-3 col-md-4 col-xs-6 mx-2",
+        animateOnMount: true,
+        duration: {
+          in: 600
+        },
+        animationIn: "fadeInLeft",
+        animationOut: "fadeOutLeft",
+        isVisible: animate
+      }, _react.default.createElement(_Card.default, {
+        onClick: function onClick() {
+          return linkTo("/genres/game-search/".concat(user._id), 700, false);
+        },
+        className: "btn h-100"
+      }, _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, {
+        className: "text-center"
+      }, user.Username), _react.default.createElement(_Card.default.Text, null, user.Email))));
+    }
+  }]);
+
+  return UserCard;
+}(_react.default.Component);
+
+exports.UserCard = UserCard;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"img/delete.svg":[function(require,module,exports) {
+module.exports = "/delete.e29e24e3.svg";
+},{}],"components/admin-view/admin-view.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82244,11 +82409,17 @@ var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
 
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
 
-var _Collapse = _interopRequireDefault(require("react-bootstrap/Collapse"));
+var _Table = _interopRequireDefault(require("react-bootstrap/Table"));
 
 var _ButtonGroup = _interopRequireDefault(require("react-bootstrap/ButtonGroup"));
 
+var _lodash = _interopRequireDefault(require("lodash"));
+
 var _axios = _interopRequireDefault(require("axios"));
+
+var _userCard = require("../user-card/user-card");
+
+var _delete = _interopRequireDefault(require("../../img/delete.svg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82281,80 +82452,90 @@ function AdminView(props) {
 
   var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
-      genre = _useState6[0],
-      setGenre = _useState6[1];
+      promiseChk = _useState6[0],
+      setPromise = _useState6[1];
 
   var _useState7 = (0, _react.useState)(false),
       _useState8 = _slicedToArray(_useState7, 2),
-      studio = _useState8[0],
-      setStudio = _useState8[1];
+      userList = _useState8[0],
+      setUserList = _useState8[1];
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      show = _useState10[0],
-      setShow = _useState10[1];
+      genre = _useState10[0],
+      setGenre = _useState10[1];
 
-  var _useState11 = (0, _react.useState)(undefined),
+  var _useState11 = (0, _react.useState)(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      msg = _useState12[0],
-      setMsg = _useState12[1];
+      studio = _useState12[0],
+      setStudio = _useState12[1];
 
-  var _useState13 = (0, _react.useState)(undefined),
+  var _useState13 = (0, _react.useState)(false),
       _useState14 = _slicedToArray(_useState13, 2),
-      error = _useState14[0],
-      setError = _useState14[1];
+      show = _useState14[0],
+      setShow = _useState14[1];
 
-  var _useState15 = (0, _react.useState)(false),
+  var _useState15 = (0, _react.useState)(undefined),
       _useState16 = _slicedToArray(_useState15, 2),
-      showResult = _useState16[0],
-      setShowResult = _useState16[1];
+      msg = _useState16[0],
+      setMsg = _useState16[1];
 
-  var _useState17 = (0, _react.useState)(false),
+  var _useState17 = (0, _react.useState)(undefined),
       _useState18 = _slicedToArray(_useState17, 2),
-      showError = _useState18[0],
-      setShowError = _useState18[1];
+      error = _useState18[0],
+      setError = _useState18[1];
 
   var _useState19 = (0, _react.useState)(false),
       _useState20 = _slicedToArray(_useState19, 2),
-      errorResult = _useState20[0],
-      setErrorResult = _useState20[1];
+      showResult = _useState20[0],
+      setShowResult = _useState20[1];
 
-  var _useState21 = (0, _react.useState)(undefined),
+  var _useState21 = (0, _react.useState)(false),
       _useState22 = _slicedToArray(_useState21, 2),
-      update = _useState22[0],
-      setUpdate = _useState22[1]; //Call to update genres/studios/games
+      showError = _useState22[0],
+      setShowError = _useState22[1];
+
+  var _useState23 = (0, _react.useState)(false),
+      _useState24 = _slicedToArray(_useState23, 2),
+      errorResult = _useState24[0],
+      setErrorResult = _useState24[1];
+
+  var _useState25 = (0, _react.useState)(undefined),
+      _useState26 = _slicedToArray(_useState25, 2),
+      update = _useState26[0],
+      setUpdate = _useState26[1]; //Call to update genres/studios/games
   //Submit states
 
 
-  var _useState23 = (0, _react.useState)(''),
-      _useState24 = _slicedToArray(_useState23, 2),
-      name = _useState24[0],
-      setName = _useState24[1];
-
-  var _useState25 = (0, _react.useState)(''),
-      _useState26 = _slicedToArray(_useState25, 2),
-      value = _useState26[0],
-      setValue = _useState26[1];
-
   var _useState27 = (0, _react.useState)(''),
       _useState28 = _slicedToArray(_useState27, 2),
-      value2 = _useState28[0],
-      setValue2 = _useState28[1];
+      name = _useState28[0],
+      setName = _useState28[1];
 
   var _useState29 = (0, _react.useState)(''),
       _useState30 = _slicedToArray(_useState29, 2),
-      value3 = _useState30[0],
-      setValue3 = _useState30[1];
+      value = _useState30[0],
+      setValue = _useState30[1];
 
   var _useState31 = (0, _react.useState)(''),
       _useState32 = _slicedToArray(_useState31, 2),
-      value4 = _useState32[0],
-      setValue4 = _useState32[1];
+      value2 = _useState32[0],
+      setValue2 = _useState32[1];
 
   var _useState33 = (0, _react.useState)(''),
       _useState34 = _slicedToArray(_useState33, 2),
-      value5 = _useState34[0],
-      setValue5 = _useState34[1];
+      value3 = _useState34[0],
+      setValue3 = _useState34[1];
+
+  var _useState35 = (0, _react.useState)(''),
+      _useState36 = _slicedToArray(_useState35, 2),
+      value4 = _useState36[0],
+      setValue4 = _useState36[1];
+
+  var _useState37 = (0, _react.useState)(''),
+      _useState38 = _slicedToArray(_useState37, 2),
+      value5 = _useState38[0],
+      setValue5 = _useState38[1];
 
   var mounted = true;
   var msg1 = 'This functionality has not been implimented yet! Sorry!';
@@ -82370,8 +82551,8 @@ function AdminView(props) {
     setShow(true);
   };
 
-  var submitInfo = function submitInfo(type) {
-    if (type === 'Genre') {
+  var submitInfo = function submitInfo(type, user) {
+    if (type === 'Create Genre') {
       (0, _axios.default)({
         method: 'post',
         url: "https://opgamesapi.herokuapp.com/admin/genres",
@@ -82403,7 +82584,7 @@ function AdminView(props) {
       });
     }
 
-    if (type === 'Studio') {
+    if (type === 'Create Studio') {
       (0, _axios.default)({
         method: 'post',
         url: "https://opgamesapi.herokuapp.com/admin/studios",
@@ -82437,7 +82618,7 @@ function AdminView(props) {
       });
     }
 
-    if (type === 'Game') {
+    if (type === 'Create Game') {
       (0, _axios.default)({
         method: 'post',
         url: "https://opgamesapi.herokuapp.com/admin/games",
@@ -82472,11 +82653,55 @@ function AdminView(props) {
         setErrorResult(listErr);
       });
     }
+
+    if (type === 'Delete User') {
+      var token = localStorage.getItem('token');
+
+      _axios.default.delete('https://opgamesapi.herokuapp.com/admin/users/' + user, {
+        headers: {
+          Authorization: "Bearer ".concat(token)
+        }
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+    }
   };
+
+  if (items === 'Manage Users') {
+    var users = [];
+
+    if (!promiseChk) {
+      setPromise(true);
+
+      _axios.default.get('https://opgamesapi.herokuapp.com/admin/users', {
+        headers: {
+          'Authorization': "Bearer ".concat(token)
+        }
+      }).then(function (response) {
+        _lodash.default.forEach(response.data, function (user) {
+          users.push(user);
+        });
+
+        if (users.length === response.data.length) {
+          setUserList(users);
+          createItems('User View');
+          setTimeout(function () {
+            setPromise(false);
+          }, 700);
+        }
+      }).catch(function (error) {
+        console.log(error);
+        setPromise(false);
+      });
+    }
+  }
 
   (0, _react.useEffect)(function () {
     mounted = true;
-    document.getElementById('main-container').className = "h-100 overflow-hidden"; //get studio as options
+    document.getElementById('main-container').className = "h-100 overflow-hidden";
+    setItems(false); //get studio as options
 
     var studiosArr = [];
     props.studios.forEach(function (e) {
@@ -82505,6 +82730,7 @@ function AdminView(props) {
 
     return function () {
       document.getElementById('main-container').className = "h-auto overflow-auto";
+      setItems(false);
       mounted = false;
     };
   }, [update]);
@@ -82515,6 +82741,55 @@ function AdminView(props) {
       setItems(event);
     }, 700);
   };
+
+  if (items === 'User View') {
+    return _react.default.createElement(_reactCssAnimated.default, {
+      className: "col",
+      animateOnMount: true,
+      animationIn: "fadeInLeft",
+      duration: {
+        in: 600
+      },
+      animationOut: "fadeOutLeft",
+      isVisible: props.animate
+    }, _react.default.createElement(_Table.default, {
+      className: "mt-2",
+      size: "sm",
+      responsive: true,
+      striped: true,
+      bordered: true,
+      hover: true,
+      variant: "dark"
+    }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "Username"), _react.default.createElement("th", null, "Email"), _react.default.createElement("th", null, "Access"), _react.default.createElement("th", null, "Remove?"))), _react.default.createElement("tbody", null, userList.map(function (user) {
+      return _react.default.createElement("tr", {
+        key: user._id
+      }, _react.default.createElement("td", null, user.Username), _react.default.createElement("td", null, user.Email), _react.default.createElement("td", null, user.Access), _react.default.createElement("td", {
+        className: "pt-2"
+      }, _react.default.createElement("img", {
+        src: _delete.default,
+        className: "mx-auto d-block",
+        onClick: function onClick() {
+          return submitInfo('Delete User', user.Username);
+        },
+        alt: "del user",
+        height: "15",
+        width: "15"
+      })));
+    }))), _react.default.createElement(_Button.default, {
+      variant: "dark",
+      onClick: function onClick() {
+        return createItems(false);
+      },
+      className: "mx-auto d-block col-6"
+    }, "Back"));
+  }
+  /* <UserCard
+                      user={user}
+                      key={user._id}
+               />*/
+
+
+  if (items === 'Edit Games') {}
 
   if (items === 'Create Items') return _react.default.createElement(_reactCssAnimated.default, {
     className: "col mt-5",
@@ -82614,7 +82889,7 @@ function AdminView(props) {
     variant: "dark"
   }, "Back"), _react.default.createElement(_Button.default, {
     onClick: function onClick() {
-      return submitInfo('Game');
+      return submitInfo('Create Game');
     },
     className: "col-4 mx-2",
     variant: "dark"
@@ -82673,7 +82948,7 @@ function AdminView(props) {
   }, "Back"), _react.default.createElement(_Button.default, {
     className: "col-4 mx-2",
     onClick: function onClick() {
-      return submitInfo('Genre');
+      return submitInfo('Create Genre');
     },
     variant: "dark"
   }, "Submit"))), showError ? _react.default.createElement(_Alert.default, {
@@ -82745,7 +83020,7 @@ function AdminView(props) {
     variant: "dark"
   }, "Back"), _react.default.createElement(_Button.default, {
     onClick: function onClick() {
-      return submitInfo('Studio');
+      return submitInfo('Create Studio');
     },
     className: "col-4 mx-2",
     variant: "dark"
@@ -82790,8 +83065,10 @@ function AdminView(props) {
     className: "text-center"
   }, _react.default.createElement("u", null, "Admin Functions")), _react.default.createElement(_Row.default, null, _react.default.createElement(_Button.default, {
     className: "col-8 mx-auto my-1",
-    onClick: handleBtn,
-    variant: "danger"
+    onClick: function onClick() {
+      return setItems('Manage Users');
+    },
+    variant: "success"
   }, "Manage Users")), _react.default.createElement(_Row.default, null, _react.default.createElement(_Button.default, {
     className: "col-8 mx-auto my-1",
     onClick: handleBtn,
@@ -82809,7 +83086,7 @@ function AdminView(props) {
     variant: "danger"
   }, "Initiate Order 66"))));
 }
-},{"react":"../node_modules/react/index.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Alert":"../node_modules/react-bootstrap/esm/Alert.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/Collapse":"../node_modules/react-bootstrap/esm/Collapse.js","react-bootstrap/ButtonGroup":"../node_modules/react-bootstrap/esm/ButtonGroup.js","axios":"../node_modules/axios/index.js"}],"../node_modules/react-bootstrap/esm/Spinner.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Alert":"../node_modules/react-bootstrap/esm/Alert.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/Table":"../node_modules/react-bootstrap/esm/Table.js","react-bootstrap/ButtonGroup":"../node_modules/react-bootstrap/esm/ButtonGroup.js","lodash":"../node_modules/lodash/lodash.js","axios":"../node_modules/axios/index.js","../user-card/user-card":"components/user-card/user-card.jsx","../../img/delete.svg":"img/delete.svg"}],"../node_modules/react-bootstrap/esm/Spinner.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82893,6 +83170,8 @@ var _studioView = require("../studio-view/studio-view");
 
 var _adminView = require("../admin-view/admin-view");
 
+var _userCard = _interopRequireDefault(require("../user-card/user-card"));
+
 var _Spinner = _interopRequireDefault(require("react-bootstrap/Spinner"));
 
 var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
@@ -82941,7 +83220,8 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       animate: true,
       redirect: false,
-      loading: true
+      loading: true,
+      winScroll: 0
     };
     return _this;
   }
@@ -83066,15 +83346,32 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
     key: "switchView",
     value: function switchView(e) {
       var thisComponent = this;
-      window.scrollTo(0, 0);
-      thisComponent.setState({
-        animate: false
-      });
-      setTimeout(function () {
+
+      if (e === '/games') {
         thisComponent.setState({
-          animate: true,
-          redirect: e
+          animate: false
         });
+      } else {
+        thisComponent.setState({
+          animate: false,
+          winScroll: window.pageYOffset
+        });
+      }
+
+      setTimeout(function () {
+        if (e === '/games') {
+          thisComponent.setState({
+            animate: true,
+            redirect: e
+          });
+          window.scrollTo(0, thisComponent.state.winScroll);
+        } else {
+          thisComponent.setState({
+            animate: true,
+            redirect: e
+          });
+          window.scrollTo(0, 0);
+        }
       }, 700);
     }
   }, {
@@ -83570,7 +83867,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps, {
 
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","lodash":"../node_modules/lodash/lodash.js","../../actions/actions":"actions/actions.js","../nav-menu/nav-menu":"components/nav-menu/nav-menu.jsx","../register-view/registration":"components/register-view/registration.jsx","../login-view/login-view":"components/login-view/login-view.jsx","../game-list/game-list":"components/game-list/game-list.jsx","../game-card/game-card":"components/game-card/game-card.jsx","../game-view/game-view":"components/game-view/game-view.jsx","../user-view/user-view":"components/user-view/user-view.jsx","../genre-card/genre-card":"components/genre-card/genre-card.jsx","../studio-card/studio-card":"components/studio-card/studio-card.jsx","../studio-view/studio-view":"components/studio-view/studio-view.jsx","../admin-view/admin-view":"components/admin-view/admin-view.jsx","react-bootstrap/Spinner":"../node_modules/react-bootstrap/esm/Spinner.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js"}],"reducers/reducers.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","lodash":"../node_modules/lodash/lodash.js","../../actions/actions":"actions/actions.js","../nav-menu/nav-menu":"components/nav-menu/nav-menu.jsx","../register-view/registration":"components/register-view/registration.jsx","../login-view/login-view":"components/login-view/login-view.jsx","../game-list/game-list":"components/game-list/game-list.jsx","../game-card/game-card":"components/game-card/game-card.jsx","../game-view/game-view":"components/game-view/game-view.jsx","../user-view/user-view":"components/user-view/user-view.jsx","../genre-card/genre-card":"components/genre-card/genre-card.jsx","../studio-card/studio-card":"components/studio-card/studio-card.jsx","../studio-view/studio-view":"components/studio-view/studio-view.jsx","../admin-view/admin-view":"components/admin-view/admin-view.jsx","../user-card/user-card":"components/user-card/user-card.jsx","react-bootstrap/Spinner":"../node_modules/react-bootstrap/esm/Spinner.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js"}],"reducers/reducers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -83798,7 +84095,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59675" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51149" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

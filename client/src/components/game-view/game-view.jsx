@@ -33,6 +33,8 @@ export class GameView extends React.Component {
         const component = this
         this.unmount = false
         var search = favorites.find(e => {return e._id === game._id})
+        window.scrollTo(0,0)
+        
         if (search) {
             component.setState({
                 favorite: true,

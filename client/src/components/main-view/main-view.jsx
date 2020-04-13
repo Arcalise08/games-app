@@ -18,6 +18,7 @@ import { GenreCard } from '../genre-card/genre-card';
 import { StudioCard } from '../studio-card/studio-card';
 import { StudioView } from '../studio-view/studio-view';
 import { AdminView } from '../admin-view/admin-view';
+import UserCard from '../user-card/user-card';
 
 //bootstrap and styling
 import Spinner from 'react-bootstrap/Spinner'
@@ -32,7 +33,8 @@ export class MainViewer extends React.Component {
         this.state = {
             animate: true,
             redirect: false,
-            loading: true
+            loading: true,
+            winScroll: (0)
         };
     }
 
@@ -167,18 +169,39 @@ export class MainViewer extends React.Component {
 
     switchView(e) {
         let thisComponent = this;
-        window.scrollTo(0, 0);
-        thisComponent.setState({
-            animate: false
-            
-        });
+        if (e === '/games') {
+            thisComponent.setState({
+                animate: false,
+            });
+        }
+        else {
+            thisComponent.setState({
+                animate: false,
+                winScroll: window.pageYOffset
+            });
+        }
+       
 
         setTimeout(function(){ 
-            thisComponent.setState({
-                animate: true,
-                redirect: e
-            });
-        }, 700);        
+            if (e === '/games') {
+                thisComponent.setState({
+                    animate: true,
+                    redirect: e
+                    
+                }); 
+                window.scrollTo(0, thisComponent.state.winScroll)
+            }
+            else {
+                thisComponent.setState({
+                    animate: true,
+                    redirect: e
+                    
+                }); 
+                window.scrollTo(0, 0)
+            }
+            
+        }, 700);
+             
     }
 
     genreMiddleware(m) {

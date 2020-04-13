@@ -5,16 +5,20 @@ import Alert from 'react-bootstrap/Alert'
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Animated from 'react-css-animated';
-import Collapse from 'react-bootstrap/Collapse'
+import Table from 'react-bootstrap/Table'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import _ from 'lodash';
 
 import axios from 'axios';
+import {UserCard} from '../user-card/user-card';
 
-
+import delImg from '../../img/delete.svg';
 
 export function AdminView(props) {
     const [ items, setItems] = useState(false);
     const [ games, setGames] = useState(false);
+    const [ promiseChk, setPromise] = useState(false);
+    const [ userList, setUserList] = useState(false);
     const [ genre, setGenre] = useState(false);
     const [ studio, setStudio] = useState(false);
     const [ show, setShow] = useState(false);
@@ -48,8 +52,8 @@ export function AdminView(props) {
         
     }
 
-    const submitInfo = (type) => {
-        if (type === 'Genre') {
+    const submitInfo = (type, user) => {
+        if (type === 'Create Genre') {
             axios({method: 'post', url: `https://opgamesapi.herokuapp.com/admin/genres`, 
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -77,7 +81,7 @@ export function AdminView(props) {
                     setErrorResult(listErr)
                 })
             }
-        if (type === 'Studio') {
+        if (type === 'Create Studio') {
             axios({method: 'post', url: `https://opgamesapi.herokuapp.com/admin/studios`, 
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -107,7 +111,7 @@ export function AdminView(props) {
                     setErrorResult(listErr)
                 })
             }
-        if (type === 'Game') {
+        if (type === 'Create Game') {
             axios({method: 'post', url: `https://opgamesapi.herokuapp.com/admin/games`, 
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -140,11 +144,57 @@ export function AdminView(props) {
                 })
             }
 
+        if (type === 'Delete User') {
+            var token = localStorage.getItem('token')
+            axios.delete('https://opgamesapi.herokuapp.com/admin/users/' + user, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+           .then(function(response){
+               console.log(response)
+
+           })
+           .catch(function(error){
+               console.log(error.response)
+           })
+        }
+
     }
+
+    if (items === 'Manage Users') {
+        var users = []
+        if (!promiseChk) {
+            setPromise(true)
+            axios.get('https://opgamesapi.herokuapp.com/admin/users', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }})
+                .then(response => {
+                    _.forEach(response.data, function(user) {
+                        users.push(user)
+                        
+                    })
+                    if (users.length === response.data.length) {
+                        setUserList(users)
+                        createItems('User View')
+                        setTimeout(function(){
+                            setPromise(false)
+                        }, 700)
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                    setPromise(false)
+                })
+            }
+        }
+
+
     useEffect(() =>{
         mounted = true
         document.getElementById('main-container').className = "h-100 overflow-hidden"
-        
+        setItems(false)
         //get studio as options
         var studiosArr = []
         props.studios.forEach(e => {
@@ -170,6 +220,7 @@ export function AdminView(props) {
 
     return() => {
         document.getElementById('main-container').className = "h-auto overflow-auto"
+        setItems(false)
         mounted = false
     }
 
@@ -183,6 +234,41 @@ export function AdminView(props) {
         
     }
 
+
+
+    if (items === 'User View') {
+        return (
+            <Animated className='col' animateOnMount animationIn="fadeInLeft" duration={{in:600}} animationOut="fadeOutLeft" isVisible={props.animate}>
+                <Table className='mt-2' size='sm' responsive striped bordered hover  variant="dark">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Access</th>
+                        <th>Remove?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {userList.map(user => 
+                            (<tr key={user._id}>  
+                                <td>{user.Username}</td>
+                                <td>{user.Email}</td>
+                                <td>{user.Access}</td>
+                                <td className='pt-2'><img src={delImg} className='mx-auto d-block'  onClick={() => submitInfo('Delete User', user.Username)} alt="del user" height='15' width='15'/></td>
+                            </tr>))}
+                    </tbody>
+                </Table>
+                <Button variant='dark' onClick={() => createItems(false)} className='mx-auto d-block col-6'>Back</Button>
+            </Animated>
+        )
+    }
+/* <UserCard
+                    user={user}
+                    key={user._id}
+             />*/
+    if (items === 'Edit Games') {
+
+    }
 
 
     
@@ -244,7 +330,7 @@ export function AdminView(props) {
                     </Form.Group>
                     <Row className='justify-content-center'>
                             <Button onClick={() => createItems('Create Items')} className='col-4 mx-2' variant='dark'>Back</Button>
-                            <Button onClick={() => submitInfo('Game')} className='col-4 mx-2' variant='dark'>Submit</Button>
+                            <Button onClick={() => submitInfo('Create Game')} className='col-4 mx-2' variant='dark'>Submit</Button>
                     </Row>
                     {showError ?
                         <Alert show={showError} className='mt-2' variant="danger" onClose={() => setShow(false)} dismissible>
@@ -275,7 +361,7 @@ export function AdminView(props) {
 
                     <Row className='justify-content-center'>
                             <Button onClick={() => createItems('Create Items')} className='col-4 mx-2' variant='dark'>Back</Button>
-                            <Button className='col-4 mx-2' onClick={() => submitInfo('Genre')} variant='dark'>Submit</Button>
+                            <Button className='col-4 mx-2' onClick={() => submitInfo('Create Genre')} variant='dark'>Submit</Button>
                     </Row>
                 </Form>
                 {showError ?
@@ -318,7 +404,7 @@ export function AdminView(props) {
 
                     <Row className='justify-content-center'>
                             <Button onClick={() => createItems('Create Items')} className='col-4 mx-2' variant='dark'>Back</Button>
-                            <Button onClick={() => submitInfo('Studio')} className='col-4 mx-2' variant='dark'>Submit</Button>
+                            <Button onClick={() => submitInfo('Create Studio')} className='col-4 mx-2' variant='dark'>Submit</Button>
                     </Row>
                     {showError ?
                         <Alert show={showError} className='mt-2' variant="danger" onClose={() => setShow(false)} dismissible>
@@ -341,7 +427,7 @@ export function AdminView(props) {
             </Alert>
                 <h4 className='text-center'><u>Admin Functions</u></h4>
                 <Row>
-                    <Button className='col-8 mx-auto my-1' onClick={handleBtn} variant="danger">Manage Users</Button>
+                    <Button className='col-8 mx-auto my-1' onClick={() => setItems('Manage Users')} variant="success">Manage Users</Button>
                 </Row>
                 <Row>
                     <Button className='col-8 mx-auto my-1' onClick={handleBtn} variant="danger">Edit Games</Button>

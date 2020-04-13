@@ -17,9 +17,10 @@ function VisibilityFilterInput(props) {
 }, []);
 
     return (
-        <Animated className='mx-auto searchBar col-lg-6' duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={visible}>
+        <Animated className='mx-auto col-lg-6' duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={visible}>
             <Form.Control
-                className=''
+                className='d-none'
+                id='searchBar'
                 onChange={e => props.setFilter(e.target.value.toLowerCase()) }
                 value={props.VisibilityFilter}
                 placeholder='search'

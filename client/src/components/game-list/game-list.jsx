@@ -28,13 +28,11 @@ function GameList(props) {
         <div className='h-100 w-100 mt-4 mx-auto'>
                 <VisibilityFilterInput visibilityFilter={visibilityFilter} visible={visible}/>
                 <div className='row justify-content-center'>
-                    <Col></Col>
                     <Col xs={10}>
                         <Row>
                             {filteredGames.map(m => <GameCard key={m._id} linkTo={props.linkTo} animate={props.animate} game={m}/>)}
                         </Row>
                     </Col>
-                    <Col></Col>
                 </div>
     </div>
     )

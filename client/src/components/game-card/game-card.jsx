@@ -18,7 +18,7 @@ export class GameCard extends React.Component {
         const{game, animate, linkTo} = this.props;
 
         return (
-            <Animated className='mt-3 col-lg-3 col-md-4 col-sm-8' animateOnMount duration={{in:600}} animationIn="fadeInLeft" animationOut="fadeOutRight" isVisible={animate}>
+            <Animated className='mt-3 col-lg-3 col-md-4 col-sm-6 col-xs-8' animateOnMount duration={{in:600}} animationIn="fadeInLeft" animationOut="fadeOutRight" isVisible={animate}>
                 <Card className="h-100">
                     <Card.Img className='mt-3 border fluid cardImg ' variant="top" src={game.Img} ></Card.Img>
                     <Card.Body>

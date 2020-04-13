@@ -18,7 +18,7 @@ export function RegisterView(props) {
     const [ show, setShow] = useState(false);
     const [ regError, setregError ] = useState('')
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -28,23 +28,32 @@ export function RegisterView(props) {
 
         if (form.checkValidity() === true) {
             event.preventDefault();
-            e.preventDefault();
-            axios.post('https://opgamesapi.herokuapp.com/users', {
-                Username: username,
-                Password: password,
-                Email: email,
-                Birthday: birthday
+            console.log(1)
+            axios({method: 'post', url: `https://opgamesapi.herokuapp.com/users`, 
+                data: {
+                    Username: username,
+                    Password: password,
+                    Email: email,
+                    Birthday: birthday
+                }
             })
-            .then(response => {
-                const data = response.data;
-                props.redirect('/login', 700, false); 
+            .then(function(response) {
+                props.linkTo('/login', 700, false); 
             })
-            .catch(e => {
+            .catch(function(err) {
+                console.log(err.response)
                 console.log('error registering user')
-                const listErr = e.response.data.errors.map((msg) => <li key={msg.value}>{msg.msg}</li>)
-                console.log(e.response.data)
-                setregError(listErr)
-                setShow(true)
+                if (err.response) { 
+                    const listErr = err.response.data.errors.map((msg) => <li key={msg.value}>{msg.msg}</li>) 
+                    setregError(listErr)
+                    setShow(true)
+                }
+                else {
+                    const listErr = <li>Unspecified error! Sorry!</li>
+                    setregError(listErr)
+                    setShow(true)
+                }
+
             });
         }
     };

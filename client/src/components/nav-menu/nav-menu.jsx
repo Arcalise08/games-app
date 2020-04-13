@@ -70,21 +70,29 @@ export class NavMenu extends React.Component {
 
 
         navToggle(value) {
+            var search = document.getElementById('searchBar')
             if (value) {
                 this.setState({
                     menuExpand: !this.state.menuExpand
                 })
+                
             }
             if (!value) {
                 this.setState({
                     menuExpand: false
                 })
+                if (search) {
+                    search.classList.toggle('d-none')
+                    this.props.setVisible(!this.props.visible)
+                }
             }
 
         }
         searchToggle(a) {
-            var searchBar = document.querySelector('.searchBar')
-            this.props.setVisible(!this.props.visible)
+            if(this.props.location === '/games') {
+                document.getElementById('searchBar').classList.toggle('d-none')
+                this.props.setVisible(!this.props.visible)
+            }
         }
 
 
@@ -94,7 +102,7 @@ export class NavMenu extends React.Component {
                 <Row>
                     {!_.isEmpty(user) ? 
                         
-                        <Button onClick={() => this.searchToggle()} className='mr-2 mt-1 btn-dark' style={{borderColor: 'rgba(255,255,255,.1)'}}><img className='m-auto' style={{filter: 'invert(.4)'}} src={searchImg} height="20" width='35' /></Button> :
+                        <Button onClick={() => this.searchToggle()} className='mr-2 mt-1 btn-dark' style={{borderColor: 'rgba(255,255,255,.1)'}}><img className='m-auto' style={{filter: 'invert(.6)'}} src={searchImg} height="20" width='35' /></Button> :
                         null
                     }   
                         <Navbar.Toggle className='mr-2 mt-1' aria-controls="basic-navbar-nav"/>
@@ -155,7 +163,7 @@ export class NavMenu extends React.Component {
             return(
                 <Navbar collapseOnSelect={true} expanded={this.state.menuExpand} onChange={() => this.something} onToggle={() => this.navToggle(true)} fixed="top" bg="dark" variant="dark" expand="lg">                    
                     <Navbar.Brand className='navBrand' onClick={() => linkTo('/games')}>OPgames</Navbar.Brand>
-                    <MediaQuery maxDeviceWidth={992} >
+                    <MediaQuery maxWidth={992} >
                         {this.navDropdown(user, onLoggedOut, linkTo)}
                     </MediaQuery>
                     
@@ -169,7 +177,8 @@ export class NavMenu extends React.Component {
                             </Row>
                         </Nav>
                     </Navbar.Collapse>
-                    <MediaQuery minDeviceWidth={992} >
+                    <MediaQuery minWidth={992}>
+                        {console.log('962')}
                         {this.navDropdown(user, onLoggedOut, linkTo)}
                         </MediaQuery>
                         
