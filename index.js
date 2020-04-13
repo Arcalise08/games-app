@@ -29,7 +29,7 @@ app.get("/client/*", (req, res) => {
 app.use(bodyparse.json());
 
 
-var allowedOrigins = ['https://opgamesapi.herokuapp.com/client/'];
+var allowedOrigins = ['https://opgamesapi.herokuapp.com'];
 
 
 
