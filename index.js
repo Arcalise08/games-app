@@ -40,10 +40,7 @@ const Studios = Models.studio;
 const Ratings = Models.rating;
 
 
-app.use(function(err, req, res, next) {
-    console.log(err.stack)
-    res.status(500).send('Unspecified server error! Sorry!')
-})
+
 
 app.use(cors({
   origin: function(origin, callback){
@@ -55,7 +52,10 @@ app.use(cors({
   }
 }));
 
-
+app.use(function(err, req, res, next) {
+  console.log(err.stack)
+  res.status(500).send('Unspecified server error! Sorry!')
+})
 
 
 //login endpoint CHECK
