@@ -88,7 +88,6 @@ export class MainViewer extends React.Component {
         var timeStamp = new Date
         var a = timeStamp.getHours()
         timeStamp.setHours(a + 4) //JWT expires in 4 hours. 
-        console.log(authData)
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.Username);
@@ -162,7 +161,6 @@ export class MainViewer extends React.Component {
             })
         Promise.all([getGames, getStudios, getGenres, getUser])
         .then(function(values){
-            console.log(values)
             currentComponent.setState({
                 loading: false
             })

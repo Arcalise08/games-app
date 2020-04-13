@@ -173,7 +173,6 @@ export class NavMenu extends React.Component {
                         </Nav>
                     </Navbar.Collapse>
                     <MediaQuery minWidth={992}>
-                        {console.log('962')}
                         {this.navDropdown(user, onLoggedOut, linkTo)}
                         </MediaQuery>
                         
