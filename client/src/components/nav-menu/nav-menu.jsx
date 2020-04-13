@@ -70,7 +70,6 @@ export class NavMenu extends React.Component {
 
 
         navToggle(value) {
-            var search = document.getElementById('searchBar')
             if (value) {
                 this.setState({
                     menuExpand: !this.state.menuExpand
@@ -81,10 +80,6 @@ export class NavMenu extends React.Component {
                 this.setState({
                     menuExpand: false
                 })
-                if (search) {
-                    search.classList.toggle('d-none')
-                    this.props.setVisible(!this.props.visible)
-                }
             }
 
         }
