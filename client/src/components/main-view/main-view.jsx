@@ -403,28 +403,28 @@ export class MainViewer extends React.Component {
                             
                             <Route exact path="/admin" render={() => this.authCheck(user, true, <AdminView studios={studios} genres={genres} games={games} update={() => this.updateInfo()} animate={this.state.animate} redirect={(e) => this.switchView(e)}/>)}/>
                             
-                            <Route exact path="/genres" render={() => this.genreMiddleware(genres.map(genre => 
-                                <GenreCard key={genre._id} genre={genre} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>))}/>
+                            <Route exact path="/genres" render={() => this.authCheck(user, true,this.genreMiddleware(genres.map(genre => 
+                                <GenreCard key={genre._id} genre={genre} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)))}/>
 
-                            <Route exact path="/genres/game-search/:gameID" render={({match}) => <div>{this.searchMiddleware(match, 'genres')}<Row className='justify-content-center'>
-                            {this.typeSearch(match, 'genre')}</Row></div> }/> 
+                            <Route exact path="/genres/game-search/:gameID" render={({match}) => this.authCheck(user, true,<div>{this.searchMiddleware(match, 'genres')}<Row className='justify-content-center'>
+                            {this.typeSearch(match, 'genre')}</Row></div>) }/> 
 
-                            <Route exact path="/studios" render={() => this.listItems(studios.map(studio => 
-                                <StudioCard key={studio._id} studio={studio} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>))}/>
+                            <Route exact path="/studios" render={() => this.authCheck(user, true,this.listItems(studios.map(studio => 
+                                <StudioCard key={studio._id} studio={studio} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)))}/>
 
                             <Route exact path="/studios/:studioID" render={({match}) =>  
-                                <StudioView studio={studios.find(m => m._id === match.params.studioID)} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>}/>
+                                this.authCheck(user, true,<StudioView studio={studios.find(m => m._id === match.params.studioID)} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)}/>
 
-                            <Route exact path="/studios/game-search/:gameID" render={({match}) => <div>{this.searchMiddleware(match, 'studios')}<Row className='justify-content-center'>
-                            {this.typeSearch(match, 'studio')}</Row></div> }/> 
+                            <Route exact path="/studios/game-search/:gameID" render={({match}) => this.authCheck(user, true,<div>{this.searchMiddleware(match, 'studios')}<Row className='justify-content-center'>
+                            {this.typeSearch(match, 'studio')}</Row></div>)}/> 
 
-                            <Route exact path="/games/:gameID" render={({match}) =>  
+                            <Route exact path="/games/:gameID" render={({match}) =>  this.authCheck(user, true,
                                 <GameView 
                                     favorites={user.Favorites}
                                     updateFavorites={(id, method) => this.updateFavorites(id,method)} 
                                     game={games.find(m => m._id === match.params.gameID)} 
                                     linkTo={(e, num, bool) => this.switchView(e, num, bool)} 
-                                    animate={this.state.animate}/>}/>
+                                    animate={this.state.animate}/>)}/>
 
                             <Route exact path='/' render={() => this.authCheck(user, true, <Redirect to='/games'/>)}/>
                             <Route exact path="/404" render={() => <h1 className='mt-5'>404!</h1>}/>
