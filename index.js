@@ -29,7 +29,7 @@ app.get("/client/*", (req, res) => {
 app.use(bodyparse.json());
 
 
-var allowedOrigins = [''];
+var allowedOrigins = ['https://opgamesapi.herokuapp.com/client/'];
 
 
 
@@ -45,7 +45,7 @@ app.use(function(err, req, res, next) {
     res.status(500).send('Unspecified server error! Sorry!')
 })
 
-/*app.use(cors({
+app.use(cors({
   origin: function(origin, callback){
     if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
@@ -54,10 +54,8 @@ app.use(function(err, req, res, next) {
     }
     return callback(null, true);
   }
-}));*/
+}));
 
-
-app.use(cors());
 
 
 
