@@ -65,7 +65,7 @@ var auth = require('./auth')(app);
 //base url redirects to games CHECK
 app.get('/', function (req, res) {
   console.log(req.headers.origin);
-  res.redirect('/documentation.html');
+  res.redirect('/client');
 });
 
 //Beautiful, Beautiful!!! REDIRECTS!!!!
