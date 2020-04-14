@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Animated from 'react-css-animated';
 
-
-import { Link } from 'react-router-dom';
 
 export class UserCard extends React.Component {
     constructor() {
@@ -29,3 +26,10 @@ export class UserCard extends React.Component {
         );
     }
 }
+
+UserCard.propTypes = {
+    user: PropTypes.shape({
+        Username: PropTypes.string.isRequired,
+        Email: PropTypes.string.isRequired,
+    }).isRequired,
+};

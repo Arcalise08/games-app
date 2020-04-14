@@ -253,6 +253,7 @@ export class MainViewer extends React.Component {
             <GameCard 
                 game={gamez.find((m) => m._id === value._id)} 
                 key= {value._id}
+                className=''
                 linkTo={(e, num, bool) => thisComponent.switchView(e, num, bool)} 
                 animate={thisComponent.state.animate}
             />
@@ -261,14 +262,14 @@ export class MainViewer extends React.Component {
         })
         if (all.length === this.props.user.Favorites.length) {
             return (
-                <div>
+                <Col>
                     <Animated className='mx-auto mt-3' animateOnMount duration={{in:600}} animationIn="slideInUp" animationOut="slideOutUp" isVisible={this.state.animate}>
                         <h3 className='text-center'><u>Your Favorites!</u></h3>
                     </Animated>
                     <Row className='justify-content-center'>
-                        {all}
+                            {all}
                     </Row>
-                </div>
+                </Col>
                 )
         }
     }
@@ -406,7 +407,7 @@ export class MainViewer extends React.Component {
                             <Route exact path="/genres" render={() => this.authCheck(user, true, this.genreMiddleware(genres.map(genre => 
                                 <GenreCard key={genre._id} genre={genre} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)))}/>
 
-                            <Route exact path="/genres/game-search/:gameID" render={({match}) => this.authCheck(user, true, <div>{this.searchMiddleware(match, 'genres')}<Row className='justify-content-center'>
+                            <Route exact path="/genres/game-search/:gameID" render={({match}) => this.authCheck(user, true, <div className='col'>{this.searchMiddleware(match, 'genres')}<Row className='justify-content-center'>
                             {this.typeSearch(match, 'genre')}</Row></div>) }/> 
 
                             <Route exact path="/studios" render={() => this.authCheck(user, true, this.listItems(studios.map(studio => 
@@ -415,7 +416,7 @@ export class MainViewer extends React.Component {
                             <Route exact path="/studios/:studioID" render={({match}) =>  
                                 this.authCheck(user, true, <StudioView studio={studios.find(m => m._id === match.params.studioID)} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)}/>
 
-                            <Route exact path="/studios/game-search/:gameID" render={({match}) => this.authCheck(user, true, <div>{this.searchMiddleware(match, 'studios')}<Row className='justify-content-center'>
+                            <Route exact path="/studios/game-search/:gameID" render={({match}) => this.authCheck(user, true, <div className='col'>{this.searchMiddleware(match, 'studios')}<Row className='justify-content-center'>
                             {this.typeSearch(match, 'studio')}</Row></div>)}/> 
 
                             <Route exact path="/games/:gameID" render={({match}) =>  this.authCheck(user, true,

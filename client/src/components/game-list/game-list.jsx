@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Animated from 'react-css-animated';
+import PropTypes from 'prop-types';
 
 import { GameCard } from '../game-card/game-card';
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
@@ -38,11 +39,11 @@ function GameList(props) {
     )
 }
 GameList.propTypes = {
-    games: PropTypes.shape({
+    games: PropTypes.arrayOf(PropTypes.shape({
         Name: PropTypes.string.isRequired,
         Description: PropTypes.string.isRequired,
         Img: PropTypes.string.isRequired,
-    }).isRequired,
+    })).isRequired,
 };
 
 export default connect(mapStateToProps)(GameList);

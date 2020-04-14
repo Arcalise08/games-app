@@ -5,6 +5,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import MediaQuery from 'react-responsive'
 import Animated from 'react-css-animated';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import starOutline from '../../img/staroutline.svg'
 import starGold from '../../img/goldstar.svg'
@@ -260,19 +261,10 @@ export class GameView extends React.Component {
     }
 }
 
-/*                <Card.Img className='mt-3 game-poster border border-dark' variant="top" src={game.Img}></Card.Img>
-            <Card.Body>
-                <Card.Title className='display-3'>{game.Name}</Card.Title>
-                <Card.Text>
-                    <span>{game.Description}</span>
-                    <span className='h4'><br/>Studio: </span>
-                    <span>{game.Studio.map(e => e.Name)}</span>
-                    <span className='h4'>  Genre: </span>
-                    <span>{game.Genre.map(e => e.Name)}</span>
-
-                </Card.Text>
-                <Link to={`/games`}>
-                    <Button>Back</Button>
-                </Link>
-            </Card.Body>
-        </Card>*/
+GameView.propTypes = {
+    game: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        Img: PropTypes.string.isRequired,
+    }).isRequired,
+};

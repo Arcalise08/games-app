@@ -43,3 +43,11 @@ export class StudioView extends React.Component {
         );
     }
 }
+StudioView.propTypes = {
+    studio: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        Founded: PropTypes.string.isRequired, //This should be a date
+        StillAlive: PropTypes.bool.isRequired
+    })
+};

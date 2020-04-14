@@ -64264,7 +64264,7 @@ var NavMenu = /*#__PURE__*/function (_React$Component) {
         className: "menuItem1 border-0"
       }, "Genres")))), _react.default.createElement(_reactResponsive.default, {
         minWidth: 992
-      }, console.log('962'), this.navDropdown(user, onLoggedOut, linkTo)));
+      }, this.navDropdown(user, onLoggedOut, linkTo)));
     }
   }]);
 
@@ -78898,11 +78898,7 @@ var _Form = _interopRequireDefault(require("react-bootstrap/Form"));
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
-var _Alert = _interopRequireDefault(require("react-bootstrap/Alert"));
-
 var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
-
-var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
 
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
 
@@ -79036,7 +79032,7 @@ function LoginView(props) {
     className: "d-block mx-auto"
   }, "Submit"))));
 }
-},{"react":"../node_modules/react/index.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Alert":"../node_modules/react-bootstrap/esm/Alert.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","axios":"../node_modules/axios/index.js"}],"../node_modules/react-bootstrap/esm/CardImg.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-bootstrap/Form":"../node_modules/react-bootstrap/esm/Form.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","axios":"../node_modules/axios/index.js"}],"../node_modules/react-bootstrap/esm/CardImg.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -79356,6 +79352,8 @@ var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
 
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _gameCard = require("../game-card/game-card");
 
 var _visibilityFilterInput = _interopRequireDefault(require("../visibility-filter-input/visibility-filter-input"));
@@ -79410,10 +79408,18 @@ function GameList(props) {
   })))));
 }
 
+GameList.propTypes = {
+  games: _propTypes.default.arrayOf(_propTypes.default.shape({
+    Name: _propTypes.default.string.isRequired,
+    Description: _propTypes.default.string.isRequired,
+    Img: _propTypes.default.string.isRequired
+  })).isRequired
+};
+
 var _default = (0, _reactRedux.connect)(mapStateToProps)(GameList);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","../game-card/game-card":"components/game-card/game-card.jsx","../visibility-filter-input/visibility-filter-input":"components/visibility-filter-input/visibility-filter-input.jsx"}],"../node_modules/react-bootstrap/esm/ListGroupItem.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","prop-types":"../node_modules/prop-types/index.js","../game-card/game-card":"components/game-card/game-card.jsx","../visibility-filter-input/visibility-filter-input":"components/visibility-filter-input/visibility-filter-input.jsx"}],"../node_modules/react-bootstrap/esm/ListGroupItem.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -79582,6 +79588,8 @@ var _reactResponsive = _interopRequireDefault(require("react-responsive"));
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _staroutline = _interopRequireDefault(require("../../img/staroutline.svg"));
 
@@ -80035,26 +80043,16 @@ var GameView = /*#__PURE__*/function (_React$Component) {
 
   return GameView;
 }(_react.default.Component);
-/*                <Card.Img className='mt-3 game-poster border border-dark' variant="top" src={game.Img}></Card.Img>
-            <Card.Body>
-                <Card.Title className='display-3'>{game.Name}</Card.Title>
-                <Card.Text>
-                    <span>{game.Description}</span>
-                    <span className='h4'><br/>Studio: </span>
-                    <span>{game.Studio.map(e => e.Name)}</span>
-                    <span className='h4'>  Genre: </span>
-                    <span>{game.Genre.map(e => e.Name)}</span>
-
-                </Card.Text>
-                <Link to={`/games`}>
-                    <Button>Back</Button>
-                </Link>
-            </Card.Body>
-        </Card>*/
-
 
 exports.GameView = GameView;
-},{"react":"../node_modules/react/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","react-responsive":"../node_modules/react-responsive/dist/react-responsive.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","axios":"../node_modules/axios/index.js","../../img/staroutline.svg":"img/staroutline.svg","../../img/goldstar.svg":"img/goldstar.svg","../../img/greenstar.svg":"img/greenstar.svg","../../img/favorite.svg":"img/favorite.svg","../../img/favoriteRed.svg":"img/favoriteRed.svg"}],"../node_modules/dom-helpers/esm/scrollbarSize.js":[function(require,module,exports) {
+GameView.propTypes = {
+  game: _propTypes.default.shape({
+    Name: _propTypes.default.string.isRequired,
+    Description: _propTypes.default.string.isRequired,
+    Img: _propTypes.default.string.isRequired
+  }).isRequired
+};
+},{"react":"../node_modules/react/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","react-responsive":"../node_modules/react-responsive/dist/react-responsive.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","axios":"../node_modules/axios/index.js","prop-types":"../node_modules/prop-types/index.js","../../img/staroutline.svg":"img/staroutline.svg","../../img/goldstar.svg":"img/goldstar.svg","../../img/greenstar.svg":"img/greenstar.svg","../../img/favorite.svg":"img/favorite.svg","../../img/favoriteRed.svg":"img/favoriteRed.svg"}],"../node_modules/dom-helpers/esm/scrollbarSize.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81909,13 +81907,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
-
 var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
 
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
-
-var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81983,7 +81977,13 @@ var GenreCard = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GenreCard = GenreCard;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"components/studio-card/studio-card.jsx":[function(require,module,exports) {
+GenreCard.propTypes = {
+  genre: _propTypes.default.shape({
+    Name: _propTypes.default.string.isRequired,
+    Description: _propTypes.default.string.isRequired
+  }).isRequired
+};
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js"}],"components/studio-card/studio-card.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81997,15 +81997,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
-var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
-
-var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
-
-var _ListGroup = _interopRequireDefault(require("react-bootstrap/ListGroup"));
-
 var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
-
-var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82061,21 +82053,18 @@ var StudioCard = /*#__PURE__*/function (_React$Component) {
 
   return StudioCard;
 }(_react.default.Component);
-/* <Card className="mt-3 col-lg-3 col-md-4 col-xs-6  mx-2">
-                    <Card.Body>
-                        <Card.Title className='text-center'>{studio.Name}</Card.Title>
-                        
-                        <Button onClick={() => linkTo(`/studios/${studio._id}`, 700, false)} className='btn-dark mt-5 mx-auto d-block'>More</Button>
-
-                    </Card.Body>
-                </Card>
-
-                <Animated className='mx-2 mt-3' animateOnMount duration={{in:600}} animationIn="fadeInLeft" animationOut="fadeOutLeft" isVisible={animate}>
-*/
-
 
 exports.StudioCard = StudioCard;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"img/like.svg":[function(require,module,exports) {
+StudioCard.propTypes = {
+  studio: _propTypes.default.shape({
+    Name: _propTypes.default.string.isRequired,
+    Description: _propTypes.default.string.isRequired,
+    Founded: _propTypes.default.string.isRequired,
+    //This should be a date
+    StillAlive: _propTypes.default.bool.isRequired
+  })
+};
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js"}],"img/like.svg":[function(require,module,exports) {
 module.exports = "/like.296848cf.svg";
 },{}],"img/dislike.svg":[function(require,module,exports) {
 module.exports = "/dislike.7f57c295.svg";
@@ -82188,6 +82177,15 @@ var StudioView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.StudioView = StudioView;
+StudioView.propTypes = {
+  studio: _propTypes.default.shape({
+    Name: _propTypes.default.string.isRequired,
+    Description: _propTypes.default.string.isRequired,
+    Founded: _propTypes.default.string.isRequired,
+    //This should be a date
+    StillAlive: _propTypes.default.bool.isRequired
+  })
+};
 },{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-bootstrap/ListGroup":"../node_modules/react-bootstrap/esm/ListGroup.js","../../img/like.svg":"img/like.svg","../../img/dislike.svg":"img/dislike.svg","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../node_modules/react-bootstrap/esm/Table.js":[function(require,module,exports) {
 "use strict";
 
@@ -82304,13 +82302,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
-
 var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
 
 var _reactCssAnimated = _interopRequireDefault(require("react-css-animated"));
-
-var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -82378,7 +82372,13 @@ var UserCard = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.UserCard = UserCard;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"img/delete.svg":[function(require,module,exports) {
+UserCard.propTypes = {
+  user: _propTypes.default.shape({
+    Username: _propTypes.default.string.isRequired,
+    Email: _propTypes.default.string.isRequired
+  }).isRequired
+};
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-css-animated":"../node_modules/react-css-animated/dist/index.es.js"}],"img/delete.svg":[function(require,module,exports) {
 module.exports = "/delete.e29e24e3.svg";
 },{}],"components/admin-view/admin-view.jsx":[function(require,module,exports) {
 "use strict";
@@ -83267,7 +83267,6 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
       var a = timeStamp.getHours();
       timeStamp.setHours(a + 4); //JWT expires in 4 hours. 
 
-      console.log(authData);
       localStorage.setItem('token', authData.token);
       localStorage.setItem('user', authData.user.Username);
       localStorage.setItem('timestamp', timeStamp); //using timestamp to limit request to server
@@ -83282,6 +83281,10 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('timestamp');
+
+      if (this.props.page != '/games') {
+        this.switchView('/login');
+      }
     }
   }, {
     key: "updateInfo",
@@ -83329,7 +83332,6 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
         });
       });
       Promise.all([getGames, getStudios, getGenres, getUser]).then(function (values) {
-        console.log(values);
         currentComponent.setState({
           loading: false
         });
@@ -83423,6 +83425,7 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
             return m._id === value._id;
           }),
           key: value._id,
+          className: "",
           linkTo: function linkTo(e, num, bool) {
             return thisComponent.switchView(e, num, bool);
           },
@@ -83432,7 +83435,7 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
       });
 
       if (all.length === this.props.user.Favorites.length) {
-        return _react.default.createElement("div", null, _react.default.createElement(_reactCssAnimated.default, {
+        return _react.default.createElement(_Col.default, null, _react.default.createElement(_reactCssAnimated.default, {
           className: "mx-auto mt-3",
           animateOnMount: true,
           duration: {
@@ -83706,7 +83709,7 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
         exact: true,
         path: "/genres",
         render: function render() {
-          return _this3.genreMiddleware(genres.map(function (genre) {
+          return _this3.authCheck(user, true, _this3.genreMiddleware(genres.map(function (genre) {
             return _react.default.createElement(_genreCard.GenreCard, {
               key: genre._id,
               genre: genre,
@@ -83715,22 +83718,24 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
               },
               animate: _this3.state.animate
             });
-          }));
+          })));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/genres/game-search/:gameID",
         render: function render(_ref3) {
           var match = _ref3.match;
-          return _react.default.createElement("div", null, _this3.searchMiddleware(match, 'genres'), _react.default.createElement(_Row.default, {
+          return _this3.authCheck(user, true, _react.default.createElement("div", {
+            className: "col"
+          }, _this3.searchMiddleware(match, 'genres'), _react.default.createElement(_Row.default, {
             className: "justify-content-center"
-          }, _this3.typeSearch(match, 'genre')));
+          }, _this3.typeSearch(match, 'genre'))));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/studios",
         render: function render() {
-          return _this3.listItems(studios.map(function (studio) {
+          return _this3.authCheck(user, true, _this3.listItems(studios.map(function (studio) {
             return _react.default.createElement(_studioCard.StudioCard, {
               key: studio._id,
               studio: studio,
@@ -83739,14 +83744,14 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
               },
               animate: _this3.state.animate
             });
-          }));
+          })));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/studios/:studioID",
         render: function render(_ref4) {
           var match = _ref4.match;
-          return _react.default.createElement(_studioView.StudioView, {
+          return _this3.authCheck(user, true, _react.default.createElement(_studioView.StudioView, {
             studio: studios.find(function (m) {
               return m._id === match.params.studioID;
             }),
@@ -83754,23 +83759,25 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
               return _this3.switchView(e, num, bool);
             },
             animate: _this3.state.animate
-          });
+          }));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/studios/game-search/:gameID",
         render: function render(_ref5) {
           var match = _ref5.match;
-          return _react.default.createElement("div", null, _this3.searchMiddleware(match, 'studios'), _react.default.createElement(_Row.default, {
+          return _this3.authCheck(user, true, _react.default.createElement("div", {
+            className: "col"
+          }, _this3.searchMiddleware(match, 'studios'), _react.default.createElement(_Row.default, {
             className: "justify-content-center"
-          }, _this3.typeSearch(match, 'studio')));
+          }, _this3.typeSearch(match, 'studio'))));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
         path: "/games/:gameID",
         render: function render(_ref6) {
           var match = _ref6.match;
-          return _react.default.createElement(_gameView.GameView, {
+          return _this3.authCheck(user, true, _react.default.createElement(_gameView.GameView, {
             favorites: user.Favorites,
             updateFavorites: function updateFavorites(id, method) {
               return _this3.updateFavorites(id, method);
@@ -83782,7 +83789,7 @@ var MainViewer = /*#__PURE__*/function (_React$Component) {
               return _this3.switchView(e, num, bool);
             },
             animate: _this3.state.animate
-          });
+          }));
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
         exact: true,
@@ -84088,7 +84095,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60828" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62765" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
