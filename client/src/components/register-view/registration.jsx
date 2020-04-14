@@ -28,7 +28,6 @@ export function RegisterView(props) {
 
         if (form.checkValidity() === true) {
             event.preventDefault();
-            console.log(1)
             axios({method: 'post', url: `https://opgamesapi.herokuapp.com/users`, 
                 data: {
                     Username: username,
