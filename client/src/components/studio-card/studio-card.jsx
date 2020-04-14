@@ -27,14 +27,11 @@ export class StudioCard extends React.Component {
     }
 }
 
-/* <Card className="mt-3 col-lg-3 col-md-4 col-xs-6  mx-2">
-                    <Card.Body>
-                        <Card.Title className='text-center'>{studio.Name}</Card.Title>
-                        
-                        <Button onClick={() => linkTo(`/studios/${studio._id}`, 700, false)} className='btn-dark mt-5 mx-auto d-block'>More</Button>
-
-                    </Card.Body>
-                </Card>
-
-                <Animated className='mx-2 mt-3' animateOnMount duration={{in:600}} animationIn="fadeInLeft" animationOut="fadeOutLeft" isVisible={animate}>
-*/
+StudioCard.propTypes = {
+    studio: PropTypes.arrayOf(PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        Founded: PropTypes.string.isRequired, //This should be a date
+        StillAlive: PropTypes.bool.isRequired
+    }))
+};

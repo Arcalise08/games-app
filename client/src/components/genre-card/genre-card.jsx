@@ -29,3 +29,10 @@ export class GenreCard extends React.Component {
         );
     }
 }
+
+GenreCard.propTypes = {
+    genre: PropTypes.arrayOf(PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired
+    })).isRequired,
+};

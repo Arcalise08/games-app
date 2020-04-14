@@ -37,5 +37,12 @@ function GameList(props) {
     </div>
     )
 }
+GameList.propTypes = {
+    games: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        Img: PropTypes.string.isRequired,
+    }).isRequired,
+};
 
 export default connect(mapStateToProps)(GameList);
