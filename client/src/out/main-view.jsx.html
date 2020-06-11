@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//tools
+import React from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom';
+import _ from 'lodash';
+import { setGames, setStudios, setGenres, setUser, setPage } from '../actions/actions';
+
+//pages
+import NavMenu from './nav-menu';
+import { RegisterView } from './registration';
+import { LoginView } from './login-view';
+import  GameList  from './game-list';
+import { GameCard } from './game-card';
+import { GameView } from './game-view';
+import { UserView } from './user-view';
+import { GenreCard } from './genre-card';
+import { StudioCard } from './studio-card';
+import { StudioView } from './studio-view';
+import { AdminView } from './admin-view';
+import UserCard from './user-card';
+
+//bootstrap and styling
+import Spinner from 'react-bootstrap/Spinner'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Animated from 'react-css-animated';
+import ListGroup from 'react-bootstrap/ListGroup'
+
+/**
+ * @module MainViewer
+ * @description As a single page application all views are rendered through this component
+ */
+export class MainViewer extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            animate: true,
+            redirect: false,
+            loading: true,
+            winScroll: (0)
+        };
+    }
+    /**
+     *  @method componentDidMount
+     *  @description Attempts to get accessToken on mount. if exists and timestamp is valid, uses it to login.
+     *  if it exists, and isnt valid, it deletes token and prompts login.
+     * */
+    componentDidMount() {
+        var mounted = true
+        if (mounted) {
+            let accessToken = localStorage.getItem('token');
+            var timeStamp = new Date(localStorage.getItem('timestamp'));
+            var currentTime = new Date
+
+            if (accessToken != null &amp;&amp; timeStamp > currentTime) {
+                this.setState({
+                    redirect: this.props.path
+                })
+
+                this.updateInfo(accessToken)
+
+            }
+            else {
+                localStorage.removeItem('user')
+                localStorage.removeItem('timestamp')
+                localStorage.removeItem('token')
+                this.setState({
+                    loading: false,
+                })
+            }
+        }
+    }
+
+
+    componentWillUnmount(mounted) {
+        mounted = false
+    }
+    /**
+     *  @method componentDidUpdate
+     *  @description Checks to see if redirect flag is true then sets it to false if it is(the redirect will have already
+     *  happened by now)
+     * */
+    componentDidUpdate() {
+        if (this.state.redirect) {
+            let currentComponent = this;
+            currentComponent.setState({
+                redirect: false
+            })
+        }
+
+    }
+
+
+    /**
+     *  @function onLoggedIn
+     *  @description Timestamps are automatically set 4 hours in advance at time of login
+     *  @param { object }authData
+     * takes object as param to set username, timestamp and token to local storage
+     * to send with http requests.
+     *
+     * */
+
+    onLoggedIn(authData) {
+
+        var timeStamp = new Date
+        var a = timeStamp.getHours()
+        timeStamp.setHours(a + 4) //JWT expires in 4 hours.
+
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', authData.user.Username);
+        localStorage.setItem('timestamp', timeStamp) //using timestamp to limit request to server
+        this.updateInfo(authData.token)
+        this.switchView('/games')
+    }
+
+    /**
+     *  @function onLoggedOut
+     *  @description On call, destroys user token in local storage and redirects to /login
+     * */
+
+    onLoggedOut() {
+        this.props.setUser({})
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('timestamp');
+        if (this.props.page != '/games') {
+            this.switchView('/login')
+        }
+    }
+
+    /**
+     *  @function updateInfo
+     *  @description Entry point function for all game data
+     *  @param {string} token
+     *  Requires access token retrieved by logging in.
+     * */
+
+    updateInfo(token) {
+        let currentComponent = this;
+        var getGames = new Promise(function(resolve) {
+            axios.get('https://opgamesapi.herokuapp.com/games')
+                .then(response => {
+                    currentComponent.props.setGames(response.data)
+                    resolve(true)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+        })
+        var getStudios = new Promise(function(resolve) {
+            axios.get('https://opgamesapi.herokuapp.com/studios')
+            .then(response => {
+                currentComponent.props.setStudios(response.data)
+                resolve(true)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+        })
+        var getGenres = new Promise(function(resolve) {
+            axios.get('https://opgamesapi.herokuapp.com/genres')
+            .then(response => {
+                currentComponent.props.setGenres(response.data)
+                resolve(true)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+        })
+
+        var getUser = new Promise(function(resolve) {
+            axios.get('https://opgamesapi.herokuapp.com/user', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }})
+                .then(response => {
+                    currentComponent.props.setUser({
+                        Username: response.data.Username,
+                        Email: response.data.Email,
+                        Access: response.data.Access,
+                        Favorites: response.data.Favorites
+                    })
+                    resolve(true)
+                })
+                .catch(function (error) {
+                    resolve(true)
+
+                })
+            })
+        Promise.all([getGames, getStudios, getGenres, getUser])
+        .then(function(values){
+            currentComponent.setState({
+                loading: false
+            })
+        })
+    }
+
+    /**
+     *  @function switchView
+     *  @description Function called for every redirect
+     *  @param {string} redirect point
+     *  Takes {string} param to redirect to string with animation and timeout.
+     * */
+
+    switchView(e) {
+        let thisComponent = this;
+        if (e === '/games') {
+            thisComponent.setState({
+                animate: false,
+            });
+        }
+        else {
+            thisComponent.setState({
+                animate: false,
+                winScroll: window.pageYOffset
+            });
+        }
+
+
+        setTimeout(function(){
+            if (e === '/games') {
+                thisComponent.setState({
+                    animate: true,
+                    redirect: e
+
+                });
+                window.scrollTo(0, thisComponent.state.winScroll)
+            }
+            else {
+                thisComponent.setState({
+                    animate: true,
+                    redirect: e
+
+                });
+                window.scrollTo(0, 0)
+            }
+
+        }, 700);
+
+    }
+
+    genreMiddleware(m) {
+        return (
+            &lt;Col>
+                &lt;Animated className='mx-auto mt-3' animateOnMount duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={this.state.animate}>
+                    &lt;h2 className='d-block text-center'>Genres&lt;/h2>
+                &lt;/Animated>
+                &lt;Row className='justify-content-center'>
+                    {m}
+                &lt;/Row>
+            &lt;/Col>
+        )
+    }
+
+    /**
+     *  @function updateFavorites
+     *  @description Function called to update user favorites.
+     * */
+
+    updateFavorites() {
+        const accessToken = localStorage.getItem('token');
+        const currentComponent = this;
+        axios.get('https://opgamesapi.herokuapp.com/user', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }})
+            .then(response => {
+                currentComponent.props.setUser({
+                    Username: response.data.Username,
+                    Email: response.data.Email,
+                    Access: response.data.Access,
+                    Favorites: response.data.Favorites
+                })
+            })
+            .catch(function (error) {
+                console.log(error)
+                currentComponent.setState({
+                    user: [],
+                });
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+
+            })
+    }
+
+    favoriteView() {
+        const gamez = this.props.games
+        const thisComponent = this
+        var all = []
+        this.props.user.Favorites.forEach(function(value, index) {
+
+            var temp = [
+            &lt;GameCard
+                game={gamez.find((m) => m._id === value._id)}
+                key= {value._id}
+                className=''
+                linkTo={(e, num, bool) => thisComponent.switchView(e, num, bool)}
+                animate={thisComponent.state.animate}
+            />
+            ]
+            all.push(temp)
+        })
+        if (all.length === this.props.user.Favorites.length) {
+            return (
+                &lt;Col>
+                    &lt;Animated className='mx-auto mt-3' animateOnMount duration={{in:600}} animationIn="slideInUp" animationOut="slideOutUp" isVisible={this.state.animate}>
+                        &lt;h3 className='text-center'>&lt;u>Your Favorites!&lt;/u>&lt;/h3>
+                    &lt;/Animated>
+                    &lt;Row className='justify-content-center'>
+                            {all}
+                    &lt;/Row>
+                &lt;/Col>
+                )
+        }
+    }
+    listItems(e){
+
+        return (
+            &lt;Col className='text-center mt-3'>
+                &lt;Animated className='mx-auto' animateOnMount duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={this.state.animate}>
+                    &lt;h2>Studios&lt;/h2>
+                &lt;/Animated>
+                &lt;Animated className='mx-auto' animateOnMount duration={{in:600}} animationIn="fadeInLeft" animationOut="fadeOutRight" isVisible={this.state.animate}>
+                    {e}
+                &lt;/Animated>
+            &lt;/Col>
+
+        )
+    }
+
+    searchMiddleware(match, type) {
+        var a = this.props.genres.find(m => m._id === match.params.gameID)
+        var b = this.props.studios.find(m => m._id === match.params.gameID)
+        if (type === 'genres') {
+            return (
+                &lt;Animated className='mx-auto mt-3 row' animateOnMount duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={this.state.animate}>
+                    &lt;h3 className='mx-auto text-center mb-3'>&lt;u>{a.Name} games&lt;/u>&lt;/h3>
+                &lt;/Animated>
+            )
+        }
+        if (type === 'studios') {
+            return (
+                &lt;Animated className='mx-auto mt-3' animateOnMount duration={{in:600}} animationIn="fadeInDown" animationOut="fadeOutUp" isVisible={this.state.animate}>
+                    &lt;h3 className='mx-auto text-center mb-3'>Games made by &lt;u>{b.Name}&lt;/u>&lt;/h3>
+                &lt;/Animated>
+            )
+        }
+
+    }
+    typeSearch(match, type) {
+        var gamesList = []
+        if (type === 'genre') {
+            _.forEach(this.props.games, function(val1, index) {
+                var tempList = []
+                _.forEach(val1.Genre, function(val, ind) {
+                    if (val._id === match.params.gameID) {
+                        gamesList.push(val1)
+                    }
+                })
+            })
+        }
+
+        if (type === 'studio') {
+            _.forEach(this.props.games, function(val1, index) {
+                var tempList = []
+                _.forEach(val1.Studio, function(val, ind) {
+                    if (val._id === match.params.gameID) {
+                        gamesList.push(val1)
+                    }
+                })
+            })
+        }
+
+        return(
+            gamesList.map(game =>
+            &lt;GameCard
+                game={game}
+                key={game._id}
+                linkTo={(e, num, bool) => this.switchView(e, num, bool)}
+                animate={this.state.animate}/>
+            )
+        )
+    }
+
+    /**
+     *  @function authCheck
+     *  @description an authorization checkpoint for all protected endpoints. if authorization is required and user
+     *  isnt valid. redirects to login.
+     *  @param {object} User
+     *  User object initiated redirect request.
+     *  @param {boolean} Authorization required?
+     *  If authorization is required to view this page.
+     *  @param {string} redirect point
+     *  The endpoint the user is trying to view.
+     *  Requires access token retrieved by logging in.
+     * */
+
+    authCheck(user, authReq, e) {
+        let currentComponent = this;
+        if (authReq) {
+            if (_.isEmpty(user)) {
+                return &lt;Redirect to='/login'/>
+            }
+            else {
+                return e
+            }
+        }
+        else {
+            return e
+        }
+    }
+
+    render() {
+        const { user, games, genres, studios } = this.props;
+        const { loading } = this.state
+
+        if (loading) {
+            return &lt;div id='main-container' className=''>&lt;/div>
+        }
+
+        return (
+            &lt;div id='main-container' className='h-100'>
+                    &lt;Route path='' render={({location}) =>&lt;NavMenu user={user} linkTo={(link, delay, bool) => this.switchView(link, delay, bool)} location={location.pathname} onLoggedOut={user => this.onLoggedOut(user)}/> }/>
+                    &lt;Route path='' render={({location}) => {if (this.state.redirect) {return &lt;Redirect push to={this.state.redirect}/>}}}/>
+
+                    &lt;div className='main-viewer row h-100 justify-content-center mx-auto'>
+                        &lt;Switch>
+
+
+                            &lt;Route exact path="/login" render={() => {
+
+                                if (_.isEmpty(user)) {
+                                    return this.authCheck(user, false,
+                                &lt;LoginView
+                                    animate={this.state.animate}
+                                    linkTo={(e, num, bool) => this.switchView(e, num, bool)}
+                                    onLoggedIn={user => this.onLoggedIn(user)}/>)
+                                }
+                                else {
+
+                                    return &lt;div>&lt;/div>
+                                }
+                            }
+                                    }/>
+
+                            &lt;Route exact path="/register" render={() => this.authCheck(user, false,
+                                &lt;RegisterView
+                                    animate={this.state.animate}
+                                    linkTo={(e, num, bool) => this.switchView(e, num, bool)}
+                                    />)}
+                            />
+                            &lt;Route exact path='/games' render={() => this.authCheck(user, true, &lt;GameList games={games} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)}/>
+
+                            &lt;Route exact path="/user" render={() => this.authCheck(user, true, &lt;UserView animate={this.state.animate} onLoggedOut={user => this.onLoggedOut(user)} user={user} redirect={(e) => this.switchView(e)} />)}/>
+
+                            &lt;Route exact path="/user/favorites" render={() => this.authCheck(user, true, this.favoriteView(this.switchView))} />
+
+                            &lt;Route exact path="/admin" render={() => this.authCheck(user, true, &lt;AdminView studios={studios} genres={genres} games={games} update={() => this.updateInfo()} animate={this.state.animate} redirect={(e) => this.switchView(e)}/>)}/>
+
+                            &lt;Route exact path="/genres" render={() => this.authCheck(user, true, this.genreMiddleware(genres.map(genre =>
+                                &lt;GenreCard key={genre._id} genre={genre} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)))}/>
+
+                            &lt;Route exact path="/genres/game-search/:gameID" render={({match}) => this.authCheck(user, true, &lt;div className='col'>{this.searchMiddleware(match, 'genres')}&lt;Row className='justify-content-center'>
+                            {this.typeSearch(match, 'genre')}&lt;/Row>&lt;/div>) }/>
+
+                            &lt;Route exact path="/studios" render={() => this.authCheck(user, true, this.listItems(studios.map(studio =>
+                                &lt;StudioCard key={studio._id} studio={studio} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)))}/>
+
+                            &lt;Route exact path="/studios/:studioID" render={({match}) =>
+                                this.authCheck(user, true, &lt;StudioView studio={studios.find(m => m._id === match.params.studioID)} linkTo={(e, num, bool) => this.switchView(e, num, bool)} animate={this.state.animate}/>)}/>
+
+                            &lt;Route exact path="/studios/game-search/:gameID" render={({match}) => this.authCheck(user, true, &lt;div className='col'>{this.searchMiddleware(match, 'studios')}&lt;Row className='justify-content-center'>
+                            {this.typeSearch(match, 'studio')}&lt;/Row>&lt;/div>)}/>
+
+                            &lt;Route exact path="/games/:gameID" render={({match}) =>  this.authCheck(user, true,
+                                &lt;GameView
+                                    favorites={user.Favorites}
+                                    updateFavorites={(id, method) => this.updateFavorites(id,method)}
+                                    game={games.find(m => m._id === match.params.gameID)}
+                                    linkTo={(e, num, bool) => this.switchView(e, num, bool)}
+                                    animate={this.state.animate}/>)}/>
+
+                            &lt;Route exact path='/' render={() => this.authCheck(user, true, &lt;Redirect to='/games'/>)}/>
+                            &lt;Route exact path="/404" render={() => &lt;h1 className='mt-5'>404!&lt;/h1>}/>
+                            &lt;Route path='*' render={() => &lt;Redirect to='/404'/>}/>
+                        &lt;/Switch>
+                    &lt;/div>
+            &lt;/div>
+        )
+
+    }
+}
+
+let mapStateToProps = state => {
+    return {
+        games: state.games,
+        studios: state.studios,
+        genres: state.genres,
+        user: state.user,
+        page: state.page
+    }
+}
+
+export default connect(mapStateToProps, { setGames, setGenres, setStudios, setUser, setPage } )(MainViewer);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-LoginView.html">LoginView</a></li><li><a href="module-MainViewer.html">MainViewer</a></li><li><a href="module-NavMenu.html">NavMenu</a></li><li><a href="module-RegisterView.html">RegisterView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 11 2020 15:51:23 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

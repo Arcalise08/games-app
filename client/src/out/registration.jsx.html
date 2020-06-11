@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: registration.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: registration.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
+import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import Animated from 'react-css-animated';
+
+import "react-datepicker/dist/react-datepicker.css";
+/**
+ * @module RegisterView
+ * @description View rendered while registering
+ * */
+export function RegisterView(props) {
+    const [ username, setUsername ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ birthday, setBirthday ] = useState(new Date());
+    const [ validated, setValidated ] = useState(false);
+    const [ show, setShow] = useState(false);
+    const [ regError, setregError ] = useState('')
+
+    /**
+     * @function handleSubmit
+     * @description handles submit of data to server. redirects to login if successful.
+     * @param {event} event target
+     * the target of the click event. (usually a button)
+     * */
+    const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        setValidated(true);
+
+        if (form.checkValidity() === true) {
+            event.preventDefault();
+            axios({method: 'post', url: `https://opgamesapi.herokuapp.com/users`,
+                data: {
+                    Username: username,
+                    Password: password,
+                    Email: email,
+                    Birthday: birthday
+                }
+            })
+            .then(function(response) {
+                props.linkTo('/login', 700, false);
+            })
+            .catch(function(err) {
+                console.log(err.response)
+                console.log('error registering user')
+                if (err.response) {
+                    const listErr = err.response.data.errors.map((msg) => &lt;li key={msg.value}>{msg.msg}&lt;/li>)
+                    setregError(listErr)
+                    setShow(true)
+                }
+                else {
+                    const listErr = &lt;li>Unspecified error! Sorry!&lt;/li>
+                    setregError(listErr)
+                    setShow(true)
+                }
+
+            });
+        }
+    };
+
+        return (
+            &lt;Animated className='p-3 mt-5 pt-3 col-lg-6 mx-auto' animateOnMount animationIn="fadeInLeft" duration={{in:600}} animationOut="fadeOutRight" isVisible={props.animate}>
+                &lt;Form className='' noValidate validated={validated} onSubmit={handleSubmit}>
+                    &lt;Alert show={show} className='mt-2' variant="danger" onClose={() => setShow(false)} dismissible>
+                        &lt;Alert.Heading>Registration Errors!&lt;/Alert.Heading>
+                        &lt;ul>{regError}&lt;/ul>
+                    &lt;/Alert>
+                    &lt;h1 className='text-center mb-5'>Register&lt;/h1>
+                &lt;Form.Row>
+                    &lt;Form.Group as={Col} controlId="ValidationCustom01">
+                    &lt;Form.Label>Username&lt;/Form.Label>
+                    &lt;Form.Control
+                            required
+                            type="Text"
+                            placeholder="Username"
+                            onChange={e => setUsername(e.target.value)}
+                        />
+                    &lt;Form.Control.Feedback type="invalid">
+                        Please enter a valid Username
+                    &lt;/Form.Control.Feedback>
+                    &lt;/Form.Group>
+
+                    &lt;Form.Group as={Col} controlId="ValidationCustom02">
+                    &lt;Form.Label>Password&lt;/Form.Label>
+                    &lt;Form.Control
+                            required
+                            type="password"
+                            placeholder="Password"
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    &lt;Form.Control.Feedback type="invalid">
+                        Please enter a valid Password
+                    &lt;/Form.Control.Feedback>
+                    &lt;/Form.Group>
+                &lt;/Form.Row>
+
+                &lt;Form.Row>
+                &lt;Form.Group as={Col} controlId="ValidationCustom03">
+                    &lt;Form.Label>Email Address&lt;/Form.Label>
+                    &lt;Form.Control
+                            required
+                            type="Email"
+                            placeholder="Enter email"
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                    &lt;Form.Control.Feedback type="invalid">
+                        Please enter a valid Email
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                &lt;Form.Group as={Col} controlId="ValidationCustom04">
+                    &lt;Form.Label className='mb-2 col'>Birthday&lt;/Form.Label>
+                    &lt;DatePicker
+                        selected={birthday}
+                        className='form-control'
+                        onChange={date => setBirthday(date)}
+                        popperClassName="some-custom-class"
+                        popperPlacement="top-end"
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        popperModifiers={{
+                            offset: {
+                            enabled: true,
+                            offset: "-50px, 0"
+                            },
+                            preventOverflow: {
+                            enabled: true,
+                            escapeWithReference: false,
+                            boundariesElement: "viewport"
+                            }
+                        }}
+                        />
+
+                    &lt;/Form.Group>
+                &lt;/Form.Row>
+                &lt;small className='text-center d-block mt-4'>Basic validation implimented&lt;/small>
+                &lt;Button className='d-block mx-auto mt-2' variant="primary" type="submit">
+                    Submit
+                &lt;/Button>
+
+                &lt;/Form>
+            &lt;/Animated>
+        );
+    }
+/*                   &lt;DatePicker
+
+                        selected={birthday}
+                        onChange={date => setBirthday(date)}
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        inline
+                    />
+                    */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-LoginView.html">LoginView</a></li><li><a href="module-MainViewer.html">MainViewer</a></li><li><a href="module-NavMenu.html">NavMenu</a></li><li><a href="module-RegisterView.html">RegisterView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 11 2020 15:51:23 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

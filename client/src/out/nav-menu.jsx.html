@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: nav-menu.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: nav-menu.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { setPage, setVisible } from '../actions/actions';
+
+import Row from 'react-bootstrap/Row'
+import MediaQuery from 'react-responsive'
+
+import ddImg from './user.svg'
+import searchImg from './search.svg'
+import signoutImg from './exit.svg'
+import settingImg from './settings.svg'
+import adminImg from './lock.svg'
+import favoriteImg from './favorite.svg'
+
+/**
+ * @module NavMenu
+ * @description The view rendered for navigation.
+ * */
+export class NavMenu extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            menuExpand: false
+        };
+
+
+    }
+    /**
+     * @method componentDidMount
+     * @description on mount, checks active link and sets navigation button to match active link.
+     * */
+        componentDidMount() {
+            let currentComponent = this;
+            var path = this.props.location
+            var all = document.querySelectorAll('.menuItem1')
+            var a = false
+            setTimeout(function(){
+                if (path)
+                all.forEach(function(e) {
+                    if (e.title === path) {
+                        e.classList.add("active")
+                    }
+
+                    else {
+                        e.classList.remove("active")
+                    }
+                })
+            },100)
+        }
+    /**
+     * @method componentDidUpdate
+     * @description on update, checks if active link has changed(this component only updates on link switching)
+     * then sets active navigation button to active navigation link.
+     * */
+        componentDidUpdate() {
+            let currentComponent = this;
+            var path = this.props.location
+            var all = document.querySelectorAll('.menuItem1')
+
+            setTimeout(function(){
+                currentComponent.props.setPage(path)
+
+                all.forEach(function(e) {
+                    if (e.title === path) {
+                        e.classList.add("active")
+                    }
+
+                    else {
+                        e.classList.remove("active")
+                    }
+                })
+            },100)
+        }
+
+
+    /**
+     * @function navToggle
+     * @description toggles the expansion of the nav menu.
+     * */
+        navToggle(value) {
+            if (value) {
+                this.setState({
+                    menuExpand: !this.state.menuExpand
+                })
+
+            }
+            if (!value) {
+                this.setState({
+                    menuExpand: false
+                })
+            }
+        }
+    /**
+     * @function search toggle
+     * @description toggles the search bar active.
+     * */
+        searchToggle(a) {
+            if(this.props.location === '/games') {
+                document.getElementById('searchBar').classList.toggle('d-none')
+                this.props.setVisible(!this.props.visible)
+            }
+        }
+
+
+        navDropdown(user, onLoggedOut, linkTo) {
+
+            return (
+                &lt;Row>
+                    {!_.isEmpty(user) ?
+
+                        &lt;Button onClick={() => this.searchToggle()} className='mr-2 mt-1 btn-dark' style={{borderColor: 'rgba(255,255,255,.1)'}}>&lt;img className='m-auto' style={{filter: 'invert(.6)'}} src={searchImg} height="20" width='35' />&lt;/Button> :
+                        null
+                    }
+                        &lt;Navbar.Toggle className='mr-2 mt-1' aria-controls="basic-navbar-nav"/>
+
+                        &lt;Dropdown className='mr-2 mt-1' style={{border: '1px solid rgba(255,255,255,.1)'}}>
+                    {!_.isEmpty(user) ?
+
+                        &lt;DropdownButton className='' bsPrefix="dropbar-toggler btn btn-img" onClick={() => this.navToggle(false)} alignRight variant='img' title={&lt;img  src={ddImg} style={{filter: 'invert(.4)'}} height='35' width='35'/>}>
+
+                            &lt;Dropdown.Header >Logged in as: &lt;strong>{user.Username}&lt;/strong> &lt;/Dropdown.Header>
+                            &lt;Dropdown.Divider>&lt;/Dropdown.Divider>
+                            &lt;Dropdown.Item onClick={() => linkTo('/user')}>Profile&lt;img className='mb-1' src={settingImg} height="20" width='35' />&lt;/Dropdown.Item>
+                            &lt;Dropdown.Item onClick={() => linkTo('/user/favorites')}>Favorites&lt;img className='mb-1' src={favoriteImg} height="20" width='35' />&lt;/Dropdown.Item>
+                            {user.Access === 3 ?
+                            &lt;Dropdown.Item onClick={() => linkTo('/admin')}>Admin&lt;img src={adminImg} height="20" width='35' />&lt;/Dropdown.Item>:
+                            null}
+
+                            &lt;Dropdown.Item onClick={ onLoggedOut}>Log out&lt;img src={signoutImg} height="20" width='35' />&lt;/Dropdown.Item>
+                        &lt;/DropdownButton> :
+
+                        &lt;DropdownButton className='' bsPrefix="dropbar-toggler btn btn-img" onClick={() => this.navToggle(false)} alignRight variant='img' title={&lt;img src={ddImg} style={{filter: 'invert(.4)'}} height='35' width='35'/>}>
+                            &lt;Dropdown.Item onClick={() => linkTo("/login")}>Login&lt;/Dropdown.Item>
+                            &lt;Dropdown.Item onClick={() => linkTo("/register")}>Register&lt;/Dropdown.Item>
+                        &lt;/DropdownButton>}
+                    &lt;/Dropdown>
+
+                &lt;/Row>
+            )
+        }
+
+        render() {
+
+            const { user, onLoggedOut, linkTo, location, page } = this.props
+            if (_.isEmpty(user)) {
+                return (
+                    &lt;Navbar collapseOnSelect={true} expanded={this.state.menuExpand} onChange={() => this.something} onToggle={() => this.navToggle(true)} fixed="top" bg="dark" variant="dark" expand="lg">
+                        &lt;Navbar.Brand className='navBrand' onClick={() => linkTo('/games')}>OPgames&lt;/Navbar.Brand>
+                        &lt;MediaQuery maxDeviceWidth={992} >
+                            {this.navDropdown(user, onLoggedOut, linkTo)}
+                        &lt;/MediaQuery>
+                    &lt;Navbar.Collapse className='mt-1' id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
+                    &lt;Nav>
+                        &lt;Row className='ml-1'>
+
+                            &lt;Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Games&lt;/Nav.Item>
+                            &lt;Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Studios&lt;/Nav.Item>
+                            &lt;Nav.Item as={Button} disabled={true} variant={'outline-light'} className='border-0'>Genres&lt;/Nav.Item>
+                        &lt;/Row>
+
+                    &lt;/Nav>
+                    &lt;/Navbar.Collapse>
+                    &lt;MediaQuery minDeviceWidth={992} >
+                        {this.navDropdown(user, onLoggedOut, linkTo)}
+                    &lt;/MediaQuery>
+                &lt;/Navbar>
+                )
+            }
+            return(
+                &lt;Navbar collapseOnSelect={true} expanded={this.state.menuExpand} onChange={() => this.something} onToggle={() => this.navToggle(true)} fixed="top" bg="dark" variant="dark" expand="lg">
+                    &lt;Navbar.Brand className='navBrand' onClick={() => linkTo('/games')}>OPgames&lt;/Navbar.Brand>
+                    &lt;MediaQuery maxWidth={992} >
+                        {this.navDropdown(user, onLoggedOut, linkTo)}
+                    &lt;/MediaQuery>
+
+
+                        &lt;Navbar.Collapse id="basic-navbar-nav" onEnter={(user) => this.navDropdown(user)}>
+                        &lt;Nav>
+                            &lt;Row className='ml-1 mt-2'>
+                                &lt;Nav.Item as={Button} variant={'outline-light'} title="/games" onClick={() =>  {this.navToggle(false);linkTo('/games')}} className='menuItem1 active border-0'>Games&lt;/Nav.Item>
+                                &lt;Nav.Item as={Button} variant={'outline-light'} title="/studios" onClick={() => {this.navToggle(false);linkTo('/studios')}}  className='menuItem1 border-0'>Studios&lt;/Nav.Item>
+                                &lt;Nav.Item as={Button} variant={'outline-light'} title="/genres" onClick={() => {this.navToggle(false);linkTo('/genres')}} className='menuItem1 border-0'>Genres&lt;/Nav.Item>
+                            &lt;/Row>
+                        &lt;/Nav>
+                    &lt;/Navbar.Collapse>
+                    &lt;MediaQuery minWidth={992}>
+                        {this.navDropdown(user, onLoggedOut, linkTo)}
+                        &lt;/MediaQuery>
+
+
+
+                &lt;/Navbar>
+
+            )
+    }
+}
+
+let mapStateToProps = state => {
+    return {
+        page: state.page,
+        visible: state.visible
+    }
+}
+export default connect(mapStateToProps, { setPage, setVisible } )(NavMenu);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-LoginView.html">LoginView</a></li><li><a href="module-MainViewer.html">MainViewer</a></li><li><a href="module-NavMenu.html">NavMenu</a></li><li><a href="module-RegisterView.html">RegisterView</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jun 11 2020 15:51:23 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
